@@ -1,0 +1,50 @@
+import type { SystemSettings } from "@/types"
+
+export const systemSettings: SystemSettings = {
+  barangayName: "Barangay Catarman",
+  municipality: "Municipality of Cordova",
+  province: "Cebu",
+  zipCode: "6017",
+  fullAddress: "Barangay Catarman, Cordova, Cebu, Philippines",
+  logoUrl: "",
+  sealUrl: "",
+  heroBackgroundUrl: "",
+  loginBackgroundUrl: "",
+  contactNumbers: ["(055) 500-1234", "0917-234-5678"],
+  emailAddress: "info@barangaycatarman.gov.ph",
+  officeHours: "Monday - Friday, 8:00 AM - 5:00 PM",
+  facebookUrl: "https://facebook.com/BarangayCatarmanOfficial",
+  missionStatement:
+    "To deliver efficient, transparent, and citizen-centered public services while promoting livelihood opportunities, environmental protection, peace and order, and sustainable community development through good governance.",
+  visionStatement:
+    "A progressive, resilient, safe, and sustainable Barangay Catarman with empowered citizens working together to build a peaceful, inclusive, and prosperous community.",
+  goals: [
+    "Strengthen transparent governance",
+    "Improve public safety and security",
+    "Support education and healthcare",
+    "Promote economic growth and livelihood",
+    "Protect the environment",
+    "Encourage active community participation",
+  ],
+  objectives: [
+    "Deliver quality public services",
+    "Improve barangay facilities",
+    "Support vulnerable sectors",
+    "Promote environmental conservation",
+    "Encourage citizen participation",
+    "Utilize technology to improve barangay services",
+  ],
+  historyText:
+    "Barangay Catarman was formally established as a self-governing community in the early part of the 20th century, tracing its roots to a small settlement of fisherfolk and farmers along the coastline. Over the decades, the barangay has grown into a thriving community known for its resilience, strong bayanihan spirit, and active civic participation. Today, Barangay Catarman continues to modernize its governance and public services while preserving the traditions and values that have defined it for generations.",
+  founded: "1948",
+  landArea: "4.2 sq. km.",
+  population: "6,480",
+  smtpHost: "smtp.barangaycatarman.gov.ph",
+  smtpPort: "587",
+  smtpUsername: "no-reply@barangaycatarman.gov.ph",
+  smtpSenderName: "Barangay Catarman OMS",
+  themePrimaryColor: "#0B2C5F",
+  themeAccentColor: "#C9A227",
+  claimDeadlineDays: 5,
+  autoExpireHours: 24,
+}

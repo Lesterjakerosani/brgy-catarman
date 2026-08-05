@@ -1,0 +1,198 @@
+"use client"
+
+import * as React from "react"
+import { useRouter } from "next/navigation"
+import { type ColumnDef } from "@tanstack/react-table"
+import {
+  CalendarPlus,
+  Check,
+  Eye,
+  FileCheck,
+  FileClock,
+  FilePlus2,
+  Printer,
+  UserRoundCheck,
+  UserRoundX,
+  XCircle,
+} from "lucide-react"
+import { PageHeader } from "@/components/shared/page-header"
+import { DataTable } from "@/components/shared/data-table"
+import { RowActions, type RowAction } from "@/components/shared/row-actions"
+import { StatusBadge } from "@/components/shared/status-badge"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { CertificateActionDialog, type CertificateActionType } from "@/components/dashboard/certificates/certificate-action-dialog"
+import { useCertificatesStore } from "@/lib/stores/certificates-store"
+import { DOCUMENT_TYPES } from "@/data/certificates"
+import { formatDate } from "@/lib/format"
+import type { CertificateRequest, CertificateStatus } from "@/types"
+
+const STATUS_FILTERS: (CertificateStatus | "all")[] = [
+  "all",
+  "Pending",
+  "Under Review",
+  "Approved",
+  "Rejected",
+  "Ready for Claim",
+  "Claimed",
+  "Not Claimed",
+  "Expired",
+]
+
+export default function CertificatesPage() {
+  const router = useRouter()
+  const certificateRequests = useCertificatesStore((s) => s.certificateRequests)
+  const [statusFilter, setStatusFilter] = React.useState<string>("all")
+  const [docTypeFilter, setDocTypeFilter] = React.useState<string>("all")
+  const [actionState, setActionState] = React.useState<{ action: CertificateActionType; request: CertificateRequest } | null>(null)
+
+  const filtered = React.useMemo(
+    () =>
+      certificateRequests.filter((r) => {
+        const matchesStatus = statusFilter === "all" || r.status === statusFilter
+        const matchesDoc = docTypeFilter === "all" || r.documentType === docTypeFilter
+        return matchesStatus && matchesDoc
+      }),
+    [certificateRequests, statusFilter, docTypeFilter]
+  )
+
+  const columns = React.useMemo<ColumnDef<CertificateRequest>[]>(
+    () => [
+      {
+        accessorKey: "referenceNumber",
+        header: "Reference No.",
+        cell: ({ row }) => (
+          <div>
+            <p className="font-mono text-xs font-semibold text-primary">{row.original.referenceNumber}</p>
+            <p className="text-xs text-muted-foreground">{formatDate(row.original.submittedAt)}</p>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "requestorName",
+        header: "Requestor",
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-foreground">{row.original.requestorName}</p>
+            <p className="text-xs text-muted-foreground">{row.original.documentType}</p>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "channel",
+        header: "Channel",
+        cell: ({ row }) => <Badge variant="outline">{row.original.channel}</Badge>,
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => <StatusBadge status={row.original.status} />,
+      },
+      {
+        id: "claimDeadline",
+        header: "Claim Deadline",
+        cell: ({ row }) => (row.original.claimDeadline ? formatDate(row.original.claimDeadline) : "—"),
+      },
+      {
+        id: "actions",
+        header: "",
+        cell: ({ row }) => {
+          const request = row.original
+          const actions: RowAction[] = []
+
+          if (request.status === "Pending") {
+            actions.push({ label: "Start Review", icon: FileClock, onClick: () => setActionState({ action: "review", request }) })
+          }
+          if (request.status === "Pending" || request.status === "Under Review") {
+            actions.push({ label: "Approve", icon: Check, onClick: () => setActionState({ action: "approve", request }) })
+            actions.push({ label: "Reject", icon: XCircle, destructive: true, onClick: () => setActionState({ action: "reject", request }) })
+          }
+          if (request.status === "Approved") {
+            actions.push({ label: "Mark Ready for Claim", icon: FileCheck, onClick: () => setActionState({ action: "ready", request }) })
+          }
+          if (request.status === "Ready for Claim") {
+            actions.push({ label: "Mark Claimed", icon: UserRoundCheck, onClick: () => setActionState({ action: "claimed", request }) })
+            actions.push({ label: "Mark Not Claimed", icon: UserRoundX, onClick: () => setActionState({ action: "notClaimed", request }) })
+            actions.push({ label: "Extend Deadline", icon: CalendarPlus, onClick: () => setActionState({ action: "extend", request }) })
+          }
+          actions.push({
+            label: "Print Certificate",
+            icon: Printer,
+            separatorBefore: true,
+            onClick: () => router.push(`/dashboard/certificates/${request.id}/print`),
+          })
+
+          return (
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="size-8" onClick={() => router.push(`/dashboard/certificates/${request.id}/print`)}>
+                <Eye className="size-4" />
+              </Button>
+              <RowActions actions={actions} />
+            </div>
+          )
+        },
+      },
+    ],
+    [router]
+  )
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Document Requests"
+        description="Review, process, and issue barangay certificates and clearances."
+        actions={
+          <Button onClick={() => router.push("/dashboard/certificates/walk-in")}>
+            <FilePlus2 className="size-4" />
+            Encode Walk-in Request
+          </Button>
+        }
+      />
+
+      <DataTable
+        columns={columns}
+        data={filtered}
+        searchPlaceholder="Search by reference no., requestor..."
+        emptyTitle="No certificate requests found"
+        emptyDescription="Try adjusting your filters."
+        toolbar={
+          <>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[170px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_FILTERS.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s === "all" ? "All Statuses" : s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={docTypeFilter} onValueChange={setDocTypeFilter}>
+              <SelectTrigger className="w-[190px]">
+                <SelectValue placeholder="Document Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Document Types</SelectItem>
+                {DOCUMENT_TYPES.map((d) => (
+                  <SelectItem key={d} value={d}>
+                    {d}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </>
+        }
+      />
+
+      <CertificateActionDialog
+        open={!!actionState}
+        onOpenChange={(open) => !open && setActionState(null)}
+        action={actionState?.action ?? null}
+        request={actionState?.request}
+      />
+    </div>
+  )
+}

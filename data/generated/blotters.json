@@ -1,0 +1,868 @@
+[
+  {
+    "id": "blt-0001",
+    "caseNumber": "BLT-2025-0001",
+    "incidentType": "Property Dispute",
+    "complainantName": "Ana Castillo",
+    "complainantAddress": "238 Farmers Avenue, Purok 4 - San Isidro",
+    "complainantContact": "1-835-426-8904",
+    "respondentName": "Cristina Pascual",
+    "respondentAddress": "Mabuhay Street, Purok 3 - Mabuhay",
+    "incidentDate": "2025-10-13",
+    "location": "Sampaguita Street, Purok 3 - Mabuhay",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Closed",
+    "mediator": "Rafael Tolentino",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Ana Castillo",
+        "timestamp": "2025-10-13T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-05-22T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-07-05T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2025-10-13T01:00:00.000Z",
+    "updatedAt": "2026-07-05T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0001",
+        "date": "2026-08-10",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0002",
+    "caseNumber": "BLT-2026-0002",
+    "incidentType": "Verbal Altercation",
+    "complainantName": "Miguel Bautista",
+    "complainantAddress": "231 Mabuhay Street, Purok 3 - Mabuhay",
+    "complainantContact": "268-232-5572",
+    "respondentName": "Perla De Leon",
+    "respondentAddress": "Maligaya Street, Purok 5 - Maligaya",
+    "incidentDate": "2026-07-23",
+    "location": "Masagana Street, Purok 5 - Maligaya",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Archived",
+    "mediator": "Rafael Tolentino",
+    "isArchived": true,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Miguel Bautista",
+        "timestamp": "2026-07-23T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-04-08T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-07-24T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-07-23T01:00:00.000Z",
+    "updatedAt": "2026-07-24T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0002",
+        "date": "2026-07-19",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0003",
+    "caseNumber": "BLT-2026-0003",
+    "incidentType": "Property Dispute",
+    "complainantName": "Arnel Guevarra",
+    "complainantAddress": "49 Tagumpay Street, Purok 6 - Bagong Silang",
+    "complainantContact": "264-838-2888 x04859",
+    "respondentName": "Filomena Yap",
+    "respondentAddress": "Bonifacio Street, Purok 1 - Poblacion",
+    "incidentDate": "2026-01-03",
+    "location": "Del Pilar Street, Purok 1 - Poblacion",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Under Mediation",
+    "mediator": "Luzviminda Fernandez",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Arnel Guevarra",
+        "timestamp": "2026-01-03T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-07-11T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Mediation In Progress",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-07-12T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-03T01:00:00.000Z",
+    "updatedAt": "2026-07-12T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0003",
+        "date": "2026-08-11",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0004",
+    "caseNumber": "BLT-2026-0004",
+    "incidentType": "Verbal Altercation",
+    "complainantName": "Carlos Tolentino",
+    "complainantAddress": "42 Malakas Street, Purok 2 - Riverside",
+    "complainantContact": "1-391-376-5060 x494",
+    "respondentName": "Carlos Valdez",
+    "respondentAddress": "Del Pilar Street, Purok 1 - Poblacion",
+    "incidentDate": "2026-04-30",
+    "location": "Rizal Street, Purok 1 - Poblacion",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Archived",
+    "mediator": "Rafael Tolentino",
+    "isArchived": true,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Carlos Tolentino",
+        "timestamp": "2026-04-30T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-02-19T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-07-31T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-04-30T01:00:00.000Z",
+    "updatedAt": "2026-07-31T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0004",
+        "date": "2026-08-08",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0005",
+    "caseNumber": "BLT-2026-0005",
+    "incidentType": "Land Boundary Dispute",
+    "complainantName": "Charito Aguilar",
+    "complainantAddress": "132 Ilog Street, Purok 2 - Riverside",
+    "complainantContact": "787-937-3027 x659",
+    "respondentName": "Charito Zamora",
+    "respondentAddress": "Tagumpay Street, Purok 6 - Bagong Silang",
+    "incidentDate": "2026-02-28",
+    "location": "Tagumpay Street, Purok 6 - Bagong Silang",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Settled",
+    "mediator": "Rafael Tolentino",
+    "resolution": "Both parties agreed to an amicable settlement with written undertaking not to repeat the conduct.",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Charito Aguilar",
+        "timestamp": "2026-02-28T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-03-25T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Amicable Settlement Reached",
+        "actor": "Rafael Tolentino",
+        "timestamp": "2026-06-08T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-02-28T01:00:00.000Z",
+    "updatedAt": "2026-06-08T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0005",
+        "date": "2026-08-18",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0006",
+    "caseNumber": "BLT-2026-0006",
+    "incidentType": "Trespassing",
+    "complainantName": "Arnel Castillo",
+    "complainantAddress": "238 Farmers Avenue, Purok 4 - San Isidro",
+    "complainantContact": "889-453-8436 x88596",
+    "respondentName": "Bernadette Francisco",
+    "respondentAddress": "Bonifacio Street, Purok 1 - Poblacion",
+    "incidentDate": "2026-05-16",
+    "location": "Del Pilar Street, Purok 1 - Poblacion",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Escalated to Court",
+    "mediator": "Manuel Torres",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Arnel Castillo",
+        "timestamp": "2026-05-16T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-06-25T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Certificate to File Action Issued",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-07-16T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-05-16T01:00:00.000Z",
+    "updatedAt": "2026-07-16T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0006",
+        "date": "2026-07-20",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0007",
+    "caseNumber": "BLT-2026-0007",
+    "incidentType": "Debt / Unpaid Loan",
+    "complainantName": "Fernando Ignacio",
+    "complainantAddress": "238 Masagana Street, Purok 5 - Maligaya",
+    "complainantContact": "1-774-854-1383 x1347",
+    "respondentName": "Jaime Manalo",
+    "respondentAddress": "Bougainvillea Street, Purok 5 - Maligaya",
+    "incidentDate": "2026-06-08",
+    "location": "Bougainvillea Street, Purok 5 - Maligaya",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Open",
+    "mediator": "Ramon Rivera",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Fernando Ignacio",
+        "timestamp": "2026-06-08T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-08T01:00:00.000Z",
+    "updatedAt": "2026-06-08T01:00:00.000Z",
+    "hearings": []
+  },
+  {
+    "id": "blt-0008",
+    "caseNumber": "BLT-2026-0008",
+    "incidentType": "Animal Complaint",
+    "complainantName": "Jose Herrera",
+    "complainantAddress": "51 Del Pilar Street, Purok 1 - Poblacion",
+    "complainantContact": "(373) 437-1987 x436",
+    "respondentName": "Grace Valdez",
+    "respondentAddress": "San Isidro Road, Purok 4 - San Isidro",
+    "incidentDate": "2026-06-13",
+    "location": "Farmers Avenue, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Settled",
+    "mediator": "Norma Valdez",
+    "resolution": "Both parties agreed to an amicable settlement with written undertaking not to repeat the conduct.",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Jose Herrera",
+        "timestamp": "2026-06-13T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Norma Valdez",
+        "timestamp": "2026-04-24T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Amicable Settlement Reached",
+        "actor": "Norma Valdez",
+        "timestamp": "2026-08-02T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-13T01:00:00.000Z",
+    "updatedAt": "2026-08-02T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0007",
+        "date": "2026-08-08",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0009",
+    "caseNumber": "BLT-2025-0009",
+    "incidentType": "Land Boundary Dispute",
+    "complainantName": "Antonio Concepcion",
+    "complainantAddress": "131 Bagong Silang Avenue, Purok 6 - Bagong Silang",
+    "complainantContact": "(613) 807-8897",
+    "respondentName": "Angelica Aquino",
+    "respondentAddress": "Pag-asa Street, Purok 6 - Bagong Silang",
+    "incidentDate": "2025-10-13",
+    "location": "Pag-asa Street, Purok 6 - Bagong Silang",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Escalated to Court",
+    "mediator": "Manuel Torres",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Antonio Concepcion",
+        "timestamp": "2025-10-13T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-06-01T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Certificate to File Action Issued",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-07-04T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2025-10-13T01:00:00.000Z",
+    "updatedAt": "2026-07-04T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0008",
+        "date": "2026-08-10",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0010",
+    "caseNumber": "BLT-2026-0010",
+    "incidentType": "Family Dispute",
+    "complainantName": "Luzviminda Del Rosario",
+    "complainantAddress": "172 Masagana Street, Purok 5 - Maligaya",
+    "complainantContact": "1-906-849-6680",
+    "respondentName": "Estrella Gonzales",
+    "respondentAddress": "Ilog Street, Purok 2 - Riverside",
+    "incidentDate": "2026-03-05",
+    "location": "Ilog Street, Purok 2 - Riverside",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Archived",
+    "mediator": "Luzviminda Fernandez",
+    "isArchived": true,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Luzviminda Del Rosario",
+        "timestamp": "2026-03-05T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-03-16T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-07-26T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-03-05T01:00:00.000Z",
+    "updatedAt": "2026-07-26T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0009",
+        "date": "2026-07-30",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0011",
+    "caseNumber": "BLT-2025-0011",
+    "incidentType": "Family Dispute",
+    "complainantName": "Karen Bernardo",
+    "complainantAddress": "121 Farmers Avenue, Purok 4 - San Isidro",
+    "complainantContact": "820.912.9920 x4157",
+    "respondentName": "Ramon Castillo",
+    "respondentAddress": "Palay Street, Purok 4 - San Isidro",
+    "incidentDate": "2025-12-07",
+    "location": "Farmers Avenue, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Open",
+    "mediator": "Rafael Tolentino",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Karen Bernardo",
+        "timestamp": "2025-12-07T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2025-12-07T01:00:00.000Z",
+    "updatedAt": "2025-12-07T01:00:00.000Z",
+    "hearings": []
+  },
+  {
+    "id": "blt-0012",
+    "caseNumber": "BLT-2026-0012",
+    "incidentType": "Family Dispute",
+    "complainantName": "Leticia Bernardo",
+    "complainantAddress": "35 Pag-asa Street, Purok 6 - Bagong Silang",
+    "complainantContact": "536-233-1630 x1420",
+    "respondentName": "Teresita Guevarra",
+    "respondentAddress": "Palay Street, Purok 4 - San Isidro",
+    "incidentDate": "2026-04-20",
+    "location": "San Isidro Road, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Under Mediation",
+    "mediator": "Manuel Torres",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Leticia Bernardo",
+        "timestamp": "2026-04-20T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-03-22T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Mediation In Progress",
+        "actor": "Manuel Torres",
+        "timestamp": "2026-06-14T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-04-20T01:00:00.000Z",
+    "updatedAt": "2026-06-14T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0010",
+        "date": "2026-07-19",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0013",
+    "caseNumber": "BLT-2026-0013",
+    "incidentType": "Threat / Intimidation",
+    "complainantName": "Gloria Salazar",
+    "complainantAddress": "194 Kalayaan Avenue, Purok 3 - Mabuhay",
+    "complainantContact": "997-877-9934",
+    "respondentName": "Miguel Uy",
+    "respondentAddress": "Palay Street, Purok 4 - San Isidro",
+    "incidentDate": "2026-06-14",
+    "location": "Palay Street, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Closed",
+    "mediator": "Ramon Rivera",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Gloria Salazar",
+        "timestamp": "2026-06-14T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-07-29T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-07-29T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-14T01:00:00.000Z",
+    "updatedAt": "2026-07-29T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0011",
+        "date": "2026-07-31",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0014",
+    "caseNumber": "BLT-2026-0014",
+    "incidentType": "Verbal Altercation",
+    "complainantName": "Teresita Aguilar",
+    "complainantAddress": "132 Ilog Street, Purok 2 - Riverside",
+    "complainantContact": "1-760-417-4809 x137",
+    "respondentName": "Dominic Gonzales",
+    "respondentAddress": "Sampaguita Street, Purok 3 - Mabuhay",
+    "incidentDate": "2026-06-28",
+    "location": "Sampaguita Street, Purok 3 - Mabuhay",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Archived",
+    "mediator": "Marites Valdez",
+    "isArchived": true,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Teresita Aguilar",
+        "timestamp": "2026-06-28T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Marites Valdez",
+        "timestamp": "2026-05-14T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Marites Valdez",
+        "timestamp": "2026-07-31T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-06-28T01:00:00.000Z",
+    "updatedAt": "2026-07-31T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0012",
+        "date": "2026-08-17",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0015",
+    "caseNumber": "BLT-2025-0015",
+    "incidentType": "Physical Injury",
+    "complainantName": "Arnel Del Rosario",
+    "complainantAddress": "200 Masagana Street, Purok 5 - Maligaya",
+    "complainantContact": "826-947-4654 x4399",
+    "respondentName": "Karen Villanueva",
+    "respondentAddress": "Tagumpay Street, Purok 6 - Bagong Silang",
+    "incidentDate": "2025-11-17",
+    "location": "Pag-asa Street, Purok 6 - Bagong Silang",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Escalated to Court",
+    "mediator": "Gloria Bautista",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Arnel Del Rosario",
+        "timestamp": "2025-11-17T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Gloria Bautista",
+        "timestamp": "2026-06-07T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Certificate to File Action Issued",
+        "actor": "Gloria Bautista",
+        "timestamp": "2026-07-21T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2025-11-17T01:00:00.000Z",
+    "updatedAt": "2026-07-21T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0013",
+        "date": "2026-07-16",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0016",
+    "caseNumber": "BLT-2025-0016",
+    "incidentType": "Family Dispute",
+    "complainantName": "Kristian Santos",
+    "complainantAddress": "176 Bonifacio Street, Purok 1 - Poblacion",
+    "complainantContact": "810.990.3947",
+    "respondentName": "Ramon Gonzales",
+    "respondentAddress": "Palay Street, Purok 4 - San Isidro",
+    "incidentDate": "2025-11-20",
+    "location": "Palay Street, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Archived",
+    "mediator": "Gloria Bautista",
+    "isArchived": true,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Kristian Santos",
+        "timestamp": "2025-11-20T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Gloria Bautista",
+        "timestamp": "2026-07-01T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Case Closed",
+        "actor": "Gloria Bautista",
+        "timestamp": "2026-07-13T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2025-11-20T01:00:00.000Z",
+    "updatedAt": "2026-07-13T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0014",
+        "date": "2026-08-04",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  },
+  {
+    "id": "blt-0017",
+    "caseNumber": "BLT-2026-0017",
+    "incidentType": "Land Boundary Dispute",
+    "complainantName": "Oscar Castillo",
+    "complainantAddress": "19 Bonifacio Street, Purok 1 - Poblacion",
+    "complainantContact": "531-479-8168 x148",
+    "respondentName": "Ferdinand Reyes",
+    "respondentAddress": "Pag-asa Street, Purok 6 - Bagong Silang",
+    "incidentDate": "2026-05-15",
+    "location": "Pag-asa Street, Purok 6 - Bagong Silang",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Open",
+    "mediator": "Manuel Torres",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Oscar Castillo",
+        "timestamp": "2026-05-15T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-05-15T01:00:00.000Z",
+    "updatedAt": "2026-05-15T01:00:00.000Z",
+    "hearings": []
+  },
+  {
+    "id": "blt-0018",
+    "caseNumber": "BLT-2026-0018",
+    "incidentType": "Physical Injury",
+    "complainantName": "Carlos Del Rosario",
+    "complainantAddress": "249 San Isidro Road, Purok 4 - San Isidro",
+    "complainantContact": "(732) 408-2364 x22525",
+    "respondentName": "Angelica Javier",
+    "respondentAddress": "Riverside Drive, Purok 2 - Riverside",
+    "incidentDate": "2026-07-26",
+    "location": "Riverside Drive, Purok 2 - Riverside",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Escalated to Court",
+    "mediator": "Ramon Rivera",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Carlos Del Rosario",
+        "timestamp": "2026-07-26T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-08-03T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Certificate to File Action Issued",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-06-30T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-07-26T01:00:00.000Z",
+    "updatedAt": "2026-06-30T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0015",
+        "date": "2026-08-10",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0019",
+    "caseNumber": "BLT-2026-0019",
+    "incidentType": "Land Boundary Dispute",
+    "complainantName": "Teodoro Herrera",
+    "complainantAddress": "51 Del Pilar Street, Purok 1 - Poblacion",
+    "complainantContact": "900-356-8883 x497",
+    "respondentName": "Samuel Uy",
+    "respondentAddress": "Malakas Street, Purok 2 - Riverside",
+    "incidentDate": "2026-01-29",
+    "location": "Riverside Drive, Purok 2 - Riverside",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Under Mediation",
+    "mediator": "Luzviminda Fernandez",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Teodoro Herrera",
+        "timestamp": "2026-01-29T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-06-04T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Mediation In Progress",
+        "actor": "Luzviminda Fernandez",
+        "timestamp": "2026-04-26T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-01-29T01:00:00.000Z",
+    "updatedAt": "2026-04-26T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0016",
+        "date": "2026-08-17",
+        "notes": "",
+        "status": "Scheduled"
+      }
+    ]
+  },
+  {
+    "id": "blt-0020",
+    "caseNumber": "BLT-2026-0020",
+    "incidentType": "Land Boundary Dispute",
+    "complainantName": "Fernando Ignacio",
+    "complainantAddress": "238 Masagana Street, Purok 5 - Maligaya",
+    "complainantContact": "1-774-854-1383 x1347",
+    "respondentName": "Ernesto Garcia",
+    "respondentAddress": "Palay Street, Purok 4 - San Isidro",
+    "incidentDate": "2026-03-12",
+    "location": "Palay Street, Purok 4 - San Isidro",
+    "narrative": "Complainant alleges that the respondent engaged in conduct causing distress and requests barangay mediation to resolve the matter amicably before elevation to higher authorities.",
+    "status": "Settled",
+    "mediator": "Ramon Rivera",
+    "resolution": "Both parties agreed to an amicable settlement with written undertaking not to repeat the conduct.",
+    "isArchived": false,
+    "history": [
+      {
+        "id": "h-0",
+        "label": "Case Filed",
+        "actor": "Fernando Ignacio",
+        "timestamp": "2026-03-12T01:00:00.000Z"
+      },
+      {
+        "id": "h-1",
+        "label": "Hearing Scheduled",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-07-21T01:00:00.000Z"
+      },
+      {
+        "id": "h-2",
+        "label": "Amicable Settlement Reached",
+        "actor": "Ramon Rivera",
+        "timestamp": "2026-07-20T01:00:00.000Z"
+      }
+    ],
+    "createdAt": "2026-03-12T01:00:00.000Z",
+    "updatedAt": "2026-07-20T01:00:00.000Z",
+    "hearings": [
+      {
+        "id": "hr-0017",
+        "date": "2026-07-22",
+        "notes": "",
+        "status": "Completed"
+      }
+    ]
+  }
+]

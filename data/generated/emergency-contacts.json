@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ec-1",
+    "name": "Barangay Emergency Hotline",
+    "category": "Barangay Hotline",
+    "contactNumber": "0917-234-5678",
+    "availability": "24/7"
+  },
+  {
+    "id": "ec-2",
+    "name": "Philippine National Police - Municipal Station",
+    "category": "Police",
+    "contactNumber": "0917-111-2222",
+    "availability": "24/7"
+  },
+  {
+    "id": "ec-3",
+    "name": "Bureau of Fire Protection",
+    "category": "Fire",
+    "contactNumber": "0917-333-4444",
+    "availability": "24/7"
+  },
+  {
+    "id": "ec-4",
+    "name": "Rural Health Unit / RHU",
+    "category": "Medical",
+    "contactNumber": "0917-555-6666",
+    "availability": "8:00 AM - 5:00 PM"
+  },
+  {
+    "id": "ec-5",
+    "name": "Municipal Disaster Risk Reduction Office (MDRRMO)",
+    "category": "Disaster Response",
+    "contactNumber": "0917-777-8888",
+    "availability": "24/7"
+  },
+  {
+    "id": "ec-6",
+    "name": "VAWC Desk (Women and Children Protection)",
+    "category": "Other",
+    "contactNumber": "0917-999-0000",
+    "availability": "8:00 AM - 5:00 PM"
+  }
+]

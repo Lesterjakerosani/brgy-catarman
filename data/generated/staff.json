@@ -1,0 +1,111 @@
+[
+  {
+    "id": "stf-001",
+    "name": "Luzviminda Fernandez",
+    "email": "luzviminda.fernandez@barangaycatarman.gov.ph",
+    "role": "Administrator",
+    "position": "System Administrator",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "1-855-356-4229 x969",
+    "lastLogin": "2026-08-01T01:00:00.000Z",
+    "createdAt": "2024-12-23T01:00:00.000Z"
+  },
+  {
+    "id": "stf-002",
+    "name": "Rafael Tolentino",
+    "email": "rafael.tolentino@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Barangay Secretary",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "504-825-2386 x84188",
+    "lastLogin": "2026-07-28T01:00:00.000Z",
+    "createdAt": "2026-05-13T01:00:00.000Z"
+  },
+  {
+    "id": "stf-003",
+    "name": "Marites Valdez",
+    "email": "marites.valdez@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Records Officer",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "473-975-9538 x534",
+    "lastLogin": "2026-07-30T01:00:00.000Z",
+    "createdAt": "2025-09-01T01:00:00.000Z"
+  },
+  {
+    "id": "stf-004",
+    "name": "Ramon Rivera",
+    "email": "ramon.rivera@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Peace and Order Officer",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "285.893.7703 x0037",
+    "lastLogin": "2026-07-26T01:00:00.000Z",
+    "createdAt": "2024-12-14T01:00:00.000Z"
+  },
+  {
+    "id": "stf-005",
+    "name": "Manuel Torres",
+    "email": "manuel.torres@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Barangay Health Worker",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "(673) 437-1714",
+    "lastLogin": "2026-07-31T01:00:00.000Z",
+    "createdAt": "2025-01-23T01:00:00.000Z"
+  },
+  {
+    "id": "stf-006",
+    "name": "Norma Valdez",
+    "email": "norma.valdez@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Treasury Aide",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "(349) 248-9613 x79705",
+    "lastLogin": "2026-07-30T01:00:00.000Z",
+    "createdAt": "2025-01-08T01:00:00.000Z"
+  },
+  {
+    "id": "stf-007",
+    "name": "Rosario Reyes",
+    "email": "rosario.reyes@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Social Welfare Officer",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "679.879.0640 x5885",
+    "lastLogin": "2026-07-30T01:00:00.000Z",
+    "createdAt": "2025-12-11T01:00:00.000Z"
+  },
+  {
+    "id": "stf-008",
+    "name": "Gloria Bautista",
+    "email": "gloria.bautista@barangaycatarman.gov.ph",
+    "role": "Staff",
+    "position": "Lupon Secretary",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "(668) 449-9186",
+    "lastLogin": "2026-07-31T01:00:00.000Z",
+    "createdAt": "2025-10-02T01:00:00.000Z"
+  },
+  {
+    "id": "stf-009",
+    "name": "Admin",
+    "email": "admin@gmail.com",
+    "role": "Administrator",
+    "position": "System Administrator",
+    "avatarUrl": "",
+    "status": "Active",
+    "contactNumber": "",
+    "lastLogin": "",
+    "createdAt": "2026-08-05T01:00:00.000Z",
+    "password": "123123"
+  }
+]

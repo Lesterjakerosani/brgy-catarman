@@ -1,0 +1,902 @@
+[
+  {
+    "id": "hh-HH-1-001",
+    "householdNumber": "HH-1-001",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "Bonifacio Street",
+      "houseNumber": "176"
+    },
+    "headResidentId": "res-0001",
+    "memberIds": [
+      "res-0001",
+      "res-0002",
+      "res-0003",
+      "res-0004"
+    ],
+    "contactNumber": "(308) 261-2038 x16919",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-03-26T01:00:00.000Z",
+    "updatedAt": "2024-03-26T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-1-002",
+    "householdNumber": "HH-1-002",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "Del Pilar Street",
+      "houseNumber": "51"
+    },
+    "headResidentId": "res-0005",
+    "memberIds": [
+      "res-0005",
+      "res-0006",
+      "res-0007",
+      "res-0008",
+      "res-0009",
+      "res-0010"
+    ],
+    "contactNumber": "760-387-0235 x2459",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-10-12T01:00:00.000Z",
+    "updatedAt": "2024-10-12T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-1-003",
+    "householdNumber": "HH-1-003",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "Bonifacio Street",
+      "houseNumber": "19"
+    },
+    "headResidentId": "res-0011",
+    "memberIds": [
+      "res-0011",
+      "res-0012",
+      "res-0013",
+      "res-0014"
+    ],
+    "contactNumber": "204-324-6441",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-01-16T01:00:00.000Z",
+    "updatedAt": "2025-01-16T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-1-004",
+    "householdNumber": "HH-1-004",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "National Highway",
+      "houseNumber": "203"
+    },
+    "headResidentId": "res-0015",
+    "memberIds": [
+      "res-0015",
+      "res-0016"
+    ],
+    "contactNumber": "214-820-4949",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-09-30T01:00:00.000Z",
+    "updatedAt": "2025-09-30T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-1-005",
+    "householdNumber": "HH-1-005",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "National Highway",
+      "houseNumber": "129"
+    },
+    "headResidentId": "res-0017",
+    "memberIds": [
+      "res-0017",
+      "res-0018"
+    ],
+    "contactNumber": "590-386-0103 x13500",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-04-04T01:00:00.000Z",
+    "updatedAt": "2024-04-04T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-1-006",
+    "householdNumber": "HH-1-006",
+    "purok": "Purok 1 - Poblacion",
+    "address": {
+      "purok": "Purok 1 - Poblacion",
+      "street": "Rizal Street",
+      "houseNumber": "97"
+    },
+    "headResidentId": "res-0019",
+    "memberIds": [
+      "res-0019",
+      "res-0020"
+    ],
+    "contactNumber": "1-274-679-2024 x66679",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-04-13T01:00:00.000Z",
+    "updatedAt": "2024-04-13T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-001",
+    "householdNumber": "HH-2-001",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Malakas Street",
+      "houseNumber": "42"
+    },
+    "headResidentId": "res-0021",
+    "memberIds": [
+      "res-0021",
+      "res-0022",
+      "res-0023",
+      "res-0024",
+      "res-0025",
+      "res-0026"
+    ],
+    "contactNumber": "611-964-4571 x780",
+    "classification": "Low Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-04-11T01:00:00.000Z",
+    "updatedAt": "2026-04-11T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-002",
+    "householdNumber": "HH-2-002",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Malakas Street",
+      "houseNumber": "91"
+    },
+    "headResidentId": "res-0027",
+    "memberIds": [
+      "res-0027",
+      "res-0028"
+    ],
+    "contactNumber": "(533) 480-0397 x259",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-01-23T01:00:00.000Z",
+    "updatedAt": "2026-01-23T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-003",
+    "householdNumber": "HH-2-003",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Riverside Drive",
+      "houseNumber": "222"
+    },
+    "headResidentId": "res-0029",
+    "memberIds": [
+      "res-0029",
+      "res-0030",
+      "res-0031",
+      "res-0032"
+    ],
+    "contactNumber": "(412) 697-7796 x40955",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": true,
+    "createdAt": "2025-01-16T01:00:00.000Z",
+    "updatedAt": "2025-01-16T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-004",
+    "householdNumber": "HH-2-004",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Riverside Drive",
+      "houseNumber": "100"
+    },
+    "headResidentId": "res-0033",
+    "memberIds": [
+      "res-0033",
+      "res-0034",
+      "res-0035",
+      "res-0036"
+    ],
+    "contactNumber": "1-567-768-7709",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-05-14T01:00:00.000Z",
+    "updatedAt": "2026-05-14T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-005",
+    "householdNumber": "HH-2-005",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Ilog Street",
+      "houseNumber": "132"
+    },
+    "headResidentId": "res-0037",
+    "memberIds": [
+      "res-0037",
+      "res-0038",
+      "res-0039",
+      "res-0040"
+    ],
+    "contactNumber": "785-235-4645 x320",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-06-13T01:00:00.000Z",
+    "updatedAt": "2024-06-13T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-006",
+    "householdNumber": "HH-2-006",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Riverside Drive",
+      "houseNumber": "6"
+    },
+    "headResidentId": "res-0041",
+    "memberIds": [
+      "res-0041",
+      "res-0042",
+      "res-0043",
+      "res-0044",
+      "res-0045"
+    ],
+    "contactNumber": "1-759-610-7594 x60464",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-10-07T01:00:00.000Z",
+    "updatedAt": "2024-10-07T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-007",
+    "householdNumber": "HH-2-007",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Ilog Street",
+      "houseNumber": "49"
+    },
+    "headResidentId": "res-0046",
+    "memberIds": [
+      "res-0046",
+      "res-0047",
+      "res-0048",
+      "res-0049"
+    ],
+    "contactNumber": "(993) 792-0246 x95793",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-04-07T01:00:00.000Z",
+    "updatedAt": "2026-04-07T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-2-008",
+    "householdNumber": "HH-2-008",
+    "purok": "Purok 2 - Riverside",
+    "address": {
+      "purok": "Purok 2 - Riverside",
+      "street": "Ilog Street",
+      "houseNumber": "121"
+    },
+    "headResidentId": "res-0050",
+    "memberIds": [
+      "res-0050",
+      "res-0051",
+      "res-0052",
+      "res-0053",
+      "res-0054"
+    ],
+    "contactNumber": "805-817-1366 x546",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-02-01T01:00:00.000Z",
+    "updatedAt": "2025-02-01T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-001",
+    "householdNumber": "HH-3-001",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Mabuhay Street",
+      "houseNumber": "231"
+    },
+    "headResidentId": "res-0055",
+    "memberIds": [
+      "res-0055",
+      "res-0056",
+      "res-0057"
+    ],
+    "contactNumber": "(610) 333-8905",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-03-05T01:00:00.000Z",
+    "updatedAt": "2024-03-05T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-002",
+    "householdNumber": "HH-3-002",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Mabuhay Street",
+      "houseNumber": "196"
+    },
+    "headResidentId": "res-0058",
+    "memberIds": [
+      "res-0058",
+      "res-0059",
+      "res-0060"
+    ],
+    "contactNumber": "409-736-3248",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-11-22T01:00:00.000Z",
+    "updatedAt": "2025-11-22T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-003",
+    "householdNumber": "HH-3-003",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Sampaguita Street",
+      "houseNumber": "241"
+    },
+    "headResidentId": "res-0061",
+    "memberIds": [
+      "res-0061",
+      "res-0062",
+      "res-0063",
+      "res-0064"
+    ],
+    "contactNumber": "(239) 640-0509",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-03-31T01:00:00.000Z",
+    "updatedAt": "2025-03-31T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-004",
+    "householdNumber": "HH-3-004",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Kalayaan Avenue",
+      "houseNumber": "194"
+    },
+    "headResidentId": "res-0065",
+    "memberIds": [
+      "res-0065",
+      "res-0066",
+      "res-0067",
+      "res-0068",
+      "res-0069",
+      "res-0070"
+    ],
+    "contactNumber": "(974) 235-7516",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-01-01T01:00:00.000Z",
+    "updatedAt": "2026-01-01T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-005",
+    "householdNumber": "HH-3-005",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Kalayaan Avenue",
+      "houseNumber": "108"
+    },
+    "headResidentId": "res-0071",
+    "memberIds": [
+      "res-0071",
+      "res-0072",
+      "res-0073"
+    ],
+    "contactNumber": "(376) 385-6358 x2723",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-01-16T01:00:00.000Z",
+    "updatedAt": "2026-01-16T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-006",
+    "householdNumber": "HH-3-006",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Sampaguita Street",
+      "houseNumber": "123"
+    },
+    "headResidentId": "res-0074",
+    "memberIds": [
+      "res-0074",
+      "res-0075",
+      "res-0076"
+    ],
+    "contactNumber": "978-464-4022 x9915",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-06-04T01:00:00.000Z",
+    "updatedAt": "2026-06-04T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-3-007",
+    "householdNumber": "HH-3-007",
+    "purok": "Purok 3 - Mabuhay",
+    "address": {
+      "purok": "Purok 3 - Mabuhay",
+      "street": "Mabuhay Street",
+      "houseNumber": "202"
+    },
+    "headResidentId": "res-0077",
+    "memberIds": [
+      "res-0077",
+      "res-0078",
+      "res-0079"
+    ],
+    "contactNumber": "(378) 846-9621 x19444",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-06-05T01:00:00.000Z",
+    "updatedAt": "2024-06-05T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-001",
+    "householdNumber": "HH-4-001",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "Farmers Avenue",
+      "houseNumber": "34"
+    },
+    "headResidentId": "res-0080",
+    "memberIds": [
+      "res-0080",
+      "res-0081",
+      "res-0082",
+      "res-0083"
+    ],
+    "contactNumber": "933.831.8467",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-04-05T01:00:00.000Z",
+    "updatedAt": "2026-04-05T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-002",
+    "householdNumber": "HH-4-002",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "Farmers Avenue",
+      "houseNumber": "238"
+    },
+    "headResidentId": "res-0084",
+    "memberIds": [
+      "res-0084",
+      "res-0085",
+      "res-0086",
+      "res-0087",
+      "res-0088",
+      "res-0089"
+    ],
+    "contactNumber": "1-835-426-8904",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-08-10T01:00:00.000Z",
+    "updatedAt": "2025-08-10T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-003",
+    "householdNumber": "HH-4-003",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "San Isidro Road",
+      "houseNumber": "249"
+    },
+    "headResidentId": "res-0090",
+    "memberIds": [
+      "res-0090",
+      "res-0091",
+      "res-0092",
+      "res-0093",
+      "res-0094",
+      "res-0095"
+    ],
+    "contactNumber": "269-385-5105 x6274",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-05-17T01:00:00.000Z",
+    "updatedAt": "2025-05-17T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-004",
+    "householdNumber": "HH-4-004",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "Farmers Avenue",
+      "houseNumber": "121"
+    },
+    "headResidentId": "res-0096",
+    "memberIds": [
+      "res-0096",
+      "res-0097",
+      "res-0098"
+    ],
+    "contactNumber": "820.912.9920 x4157",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-12-02T01:00:00.000Z",
+    "updatedAt": "2024-12-02T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-005",
+    "householdNumber": "HH-4-005",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "Farmers Avenue",
+      "houseNumber": "57"
+    },
+    "headResidentId": "res-0099",
+    "memberIds": [
+      "res-0099",
+      "res-0100",
+      "res-0101"
+    ],
+    "contactNumber": "1-387-985-3267 x01186",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-10-22T01:00:00.000Z",
+    "updatedAt": "2024-10-22T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-4-006",
+    "householdNumber": "HH-4-006",
+    "purok": "Purok 4 - San Isidro",
+    "address": {
+      "purok": "Purok 4 - San Isidro",
+      "street": "San Isidro Road",
+      "houseNumber": "100"
+    },
+    "headResidentId": "res-0102",
+    "memberIds": [
+      "res-0102",
+      "res-0103",
+      "res-0104",
+      "res-0105"
+    ],
+    "contactNumber": "855.405.4986",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-03-21T01:00:00.000Z",
+    "updatedAt": "2026-03-21T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-001",
+    "householdNumber": "HH-5-001",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Masagana Street",
+      "houseNumber": "183"
+    },
+    "headResidentId": "res-0106",
+    "memberIds": [
+      "res-0106",
+      "res-0107",
+      "res-0108",
+      "res-0109",
+      "res-0110"
+    ],
+    "contactNumber": "384.812.4289 x9578",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": true,
+    "createdAt": "2025-05-25T01:00:00.000Z",
+    "updatedAt": "2025-05-25T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-002",
+    "householdNumber": "HH-5-002",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Masagana Street",
+      "houseNumber": "238"
+    },
+    "headResidentId": "res-0111",
+    "memberIds": [
+      "res-0111",
+      "res-0112",
+      "res-0113",
+      "res-0114"
+    ],
+    "contactNumber": "1-774-854-1383 x1347",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-01-06T01:00:00.000Z",
+    "updatedAt": "2026-01-06T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-003",
+    "householdNumber": "HH-5-003",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Masagana Street",
+      "houseNumber": "33"
+    },
+    "headResidentId": "res-0115",
+    "memberIds": [
+      "res-0115",
+      "res-0116",
+      "res-0117",
+      "res-0118"
+    ],
+    "contactNumber": "1-355-201-7612 x64626",
+    "classification": "Not Classified",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-06-28T01:00:00.000Z",
+    "updatedAt": "2025-06-28T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-004",
+    "householdNumber": "HH-5-004",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Masagana Street",
+      "houseNumber": "200"
+    },
+    "headResidentId": "res-0119",
+    "memberIds": [
+      "res-0119",
+      "res-0120",
+      "res-0121",
+      "res-0122",
+      "res-0123"
+    ],
+    "contactNumber": "1-786-514-2744 x863",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2026-01-29T01:00:00.000Z",
+    "updatedAt": "2026-01-29T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-005",
+    "householdNumber": "HH-5-005",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Bougainvillea Street",
+      "houseNumber": "240"
+    },
+    "headResidentId": "res-0124",
+    "memberIds": [
+      "res-0124",
+      "res-0125"
+    ],
+    "contactNumber": "(973) 967-4747",
+    "classification": "Not Classified",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-10-12T01:00:00.000Z",
+    "updatedAt": "2025-10-12T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-006",
+    "householdNumber": "HH-5-006",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Bougainvillea Street",
+      "houseNumber": "218"
+    },
+    "headResidentId": "res-0126",
+    "memberIds": [
+      "res-0126",
+      "res-0127",
+      "res-0128",
+      "res-0129"
+    ],
+    "contactNumber": "1-200-947-6092",
+    "classification": "Low Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-02-25T01:00:00.000Z",
+    "updatedAt": "2026-02-25T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-007",
+    "householdNumber": "HH-5-007",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Masagana Street",
+      "houseNumber": "172"
+    },
+    "headResidentId": "res-0130",
+    "memberIds": [
+      "res-0130",
+      "res-0131"
+    ],
+    "contactNumber": "1-906-849-6680",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-05-20T01:00:00.000Z",
+    "updatedAt": "2024-05-20T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-5-008",
+    "householdNumber": "HH-5-008",
+    "purok": "Purok 5 - Maligaya",
+    "address": {
+      "purok": "Purok 5 - Maligaya",
+      "street": "Bougainvillea Street",
+      "houseNumber": "18"
+    },
+    "headResidentId": "res-0132",
+    "memberIds": [
+      "res-0132",
+      "res-0133",
+      "res-0134",
+      "res-0135",
+      "res-0136",
+      "res-0137"
+    ],
+    "contactNumber": "637.647.4293",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-03-24T01:00:00.000Z",
+    "updatedAt": "2025-03-24T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-001",
+    "householdNumber": "HH-6-001",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Tagumpay Street",
+      "houseNumber": "3"
+    },
+    "headResidentId": "res-0138",
+    "memberIds": [
+      "res-0138",
+      "res-0139",
+      "res-0140"
+    ],
+    "contactNumber": "759-792-3388",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-04-08T01:00:00.000Z",
+    "updatedAt": "2025-04-08T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-002",
+    "householdNumber": "HH-6-002",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Pag-asa Street",
+      "houseNumber": "35"
+    },
+    "headResidentId": "res-0141",
+    "memberIds": [
+      "res-0141",
+      "res-0142",
+      "res-0143",
+      "res-0144",
+      "res-0145"
+    ],
+    "contactNumber": "536-233-1630 x1420",
+    "classification": "NHTS Poor",
+    "is4PsBeneficiary": true,
+    "createdAt": "2026-03-31T01:00:00.000Z",
+    "updatedAt": "2026-03-31T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-003",
+    "householdNumber": "HH-6-003",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Tagumpay Street",
+      "houseNumber": "49"
+    },
+    "headResidentId": "res-0146",
+    "memberIds": [
+      "res-0146",
+      "res-0147",
+      "res-0148"
+    ],
+    "contactNumber": "955.269.0050 x28726",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-04-02T01:00:00.000Z",
+    "updatedAt": "2024-04-02T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-004",
+    "householdNumber": "HH-6-004",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Bagong Silang Avenue",
+      "houseNumber": "131"
+    },
+    "headResidentId": "res-0149",
+    "memberIds": [
+      "res-0149",
+      "res-0150",
+      "res-0151",
+      "res-0152",
+      "res-0153"
+    ],
+    "contactNumber": "(613) 807-8897",
+    "classification": "Low Income",
+    "is4PsBeneficiary": false,
+    "createdAt": "2024-05-11T01:00:00.000Z",
+    "updatedAt": "2024-05-11T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-005",
+    "householdNumber": "HH-6-005",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Pag-asa Street",
+      "houseNumber": "81"
+    },
+    "headResidentId": "res-0154",
+    "memberIds": [
+      "res-0154",
+      "res-0155",
+      "res-0156",
+      "res-0157",
+      "res-0158",
+      "res-0159"
+    ],
+    "contactNumber": "1-703-634-4098",
+    "classification": "Middle Income",
+    "is4PsBeneficiary": true,
+    "createdAt": "2024-12-17T01:00:00.000Z",
+    "updatedAt": "2024-12-17T01:00:00.000Z"
+  },
+  {
+    "id": "hh-HH-6-006",
+    "householdNumber": "HH-6-006",
+    "purok": "Purok 6 - Bagong Silang",
+    "address": {
+      "purok": "Purok 6 - Bagong Silang",
+      "street": "Bagong Silang Avenue",
+      "houseNumber": "248"
+    },
+    "headResidentId": "res-0160",
+    "memberIds": [
+      "res-0160",
+      "res-0161",
+      "res-0162"
+    ],
+    "contactNumber": "545.572.1509 x29060",
+    "classification": "Not Classified",
+    "is4PsBeneficiary": false,
+    "createdAt": "2025-02-07T01:00:00.000Z",
+    "updatedAt": "2025-02-07T01:00:00.000Z"
+  }
+]
