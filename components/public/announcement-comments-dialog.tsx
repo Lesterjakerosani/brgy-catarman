@@ -10,6 +10,7 @@ import { CommentRow } from "@/components/public/comment-row"
 import { AnnouncementMediaGrid } from "@/components/public/announcement-media-grid"
 import { AnnouncementAttachmentList } from "@/components/public/announcement-attachment-list"
 import { AnnouncementLightbox } from "@/components/public/announcement-lightbox"
+import { useAuthStore } from "@/lib/stores/auth-store"
 import { formatRelativeTime } from "@/lib/format"
 import { prepareAnnouncementHtml } from "@/lib/safe-html"
 import type { CommentAuthorRole, UserComment } from "@/lib/stores/engagement-store"
@@ -26,6 +27,8 @@ interface AnnouncementCommentsDialogProps {
   viewerName: string
   viewerRole?: CommentAuthorRole
   onAddComment: (text: string) => void
+  /** True only inside the staff/admin dashboard -- see useAnnouncementEngagement. */
+  isStaffContext?: boolean
 }
 
 export function AnnouncementCommentsDialog({
@@ -38,10 +41,13 @@ export function AnnouncementCommentsDialog({
   viewerName,
   viewerRole,
   onAddComment,
+  isStaffContext = false,
 }: AnnouncementCommentsDialogProps) {
   const [draft, setDraft] = React.useState("")
   const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null)
   const mediaUrls = announcement.mediaUrls ?? []
+  const session = useAuthStore((s) => s.session)
+  const viewerAvatarUrl = isStaffContext ? session?.avatarUrl : undefined
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -125,9 +131,10 @@ export function AnnouncementCommentsDialog({
                 role={c.authorRole}
                 text={c.text}
                 timeLabel="Just now"
-                isYou
+                authorViewerKey={c.viewerKey}
                 viewerName={viewerName}
                 viewerRole={viewerRole}
+                isStaffContext={isStaffContext}
               />
             ))}
 
@@ -140,13 +147,15 @@ export function AnnouncementCommentsDialog({
                 timeLabel={`${c.timeLabel} ago`}
                 viewerName={viewerName}
                 viewerRole={viewerRole}
+                isStaffContext={isStaffContext}
+                isSeeded
               />
             ))}
           </div>
         </div>
 
         <form onSubmit={submit} className="flex shrink-0 items-center gap-2 border-t border-border p-3">
-          <InitialsAvatar name={viewerName} size="sm" />
+          <InitialsAvatar name={viewerName} photoUrl={viewerAvatarUrl} size="sm" />
           <div className="relative flex-1">
             <Input
               value={draft}
@@ -178,6 +187,7 @@ export function AnnouncementCommentsDialog({
         announcement={announcement}
         mediaUrls={mediaUrls}
         startIndex={lightboxIndex}
+        isStaffContext={isStaffContext}
       />
     ) : null}
     </>

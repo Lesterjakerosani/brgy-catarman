@@ -104,6 +104,20 @@ export const useSettingsStore = create<SettingsState>()(
         })
       },
     }),
-    { name: "catarman-settings-store", storage: idbJSONStorage }
+    {
+      name: "catarman-settings-store",
+      storage: idbJSONStorage,
+      version: 1,
+      migrate: (persisted) => {
+        const state = persisted as SettingsState
+        if (state?.settings?.municipality === "Municipality of Catarman") {
+          state.settings.municipality = seedSettings.municipality
+          state.settings.province = seedSettings.province
+          state.settings.zipCode = seedSettings.zipCode
+          state.settings.fullAddress = seedSettings.fullAddress
+        }
+        return state
+      },
+    }
   )
 )

@@ -1,8 +1,11 @@
+"use client"
+
 import { Megaphone, Phone } from "lucide-react"
-import { announcements } from "@/data/announcements"
+import { useAnnouncementsStore } from "@/lib/stores/announcements-store"
 import { systemSettings } from "@/data/settings"
 
 export function AnnouncementTicker() {
+  const announcements = useAnnouncementsStore((s) => s.announcements)
   const latest = announcements
     .filter((a) => a.status === "Published")
     .sort((a, b) => new Date(b.publishAt).getTime() - new Date(a.publishAt).getTime())

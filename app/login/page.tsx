@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { motion } from "framer-motion"
 import toast from "react-hot-toast"
-import { ArrowLeft, ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
@@ -217,11 +217,6 @@ export default function LoginPage() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="relative w-full max-w-[430px]"
         >
-          <Link href="/" className="mb-8 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground md:hidden">
-            <ArrowLeft className="size-3.5" />
-            Back to homepage
-          </Link>
-
           <div className="mb-8 flex items-center gap-3 md:hidden">
             <BarangaySeal className="size-10" />
             <div>

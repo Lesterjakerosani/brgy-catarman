@@ -59,6 +59,7 @@ export default function AnnouncementsPage() {
               <AnnouncementPostCard
                 key={a.id}
                 announcement={a}
+                isStaffContext
                 adminActions={{
                   onPreview: () => setPreviewing(a),
                   onEdit: () => { setEditing(a); setAutoOpenMedia(false); setFormOpen(true) },

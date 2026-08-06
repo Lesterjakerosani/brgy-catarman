@@ -156,6 +156,21 @@ export const useStaffStore = create<StaffState>()(
         })
       },
     }),
-    { name: "catarman-staff-store", storage: idbJSONStorage }
+    {
+      name: "catarman-staff-store",
+      storage: idbJSONStorage,
+      version: 1,
+      migrate: (persisted) => {
+        const state = persisted as StaffState
+        if (state?.staffMembers) {
+          const existingEmails = new Set(state.staffMembers.map((s) => s.email.toLowerCase()))
+          const missingSeedAccounts = seedStaff.filter((s) => !existingEmails.has(s.email.toLowerCase()))
+          if (missingSeedAccounts.length > 0) {
+            state.staffMembers = [...state.staffMembers, ...missingSeedAccounts]
+          }
+        }
+        return state
+      },
+    }
   )
 )

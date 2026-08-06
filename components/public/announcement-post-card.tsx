@@ -28,9 +28,12 @@ interface AdminActions {
 export function AnnouncementPostCard({
   announcement,
   adminActions,
+  isStaffContext = false,
 }: {
   announcement: Announcement
   adminActions?: AdminActions
+  /** True only inside the staff/admin dashboard -- see useAnnouncementEngagement. */
+  isStaffContext?: boolean
 }) {
   const [commentsOpen, setCommentsOpen] = React.useState(false)
   const [reactionsOpen, setReactionsOpen] = React.useState(false)
@@ -38,8 +41,8 @@ export function AnnouncementPostCard({
   const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null)
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const { likeCount, shareCount, reaction, pickReaction: pickReactionRaw, seededComments, myComments, totalCommentCount, addComment, viewerName, viewerRole } =
-    useAnnouncementEngagement(announcement)
+  const { likeCount, reaction, pickReaction: pickReactionRaw, seededComments, myComments, totalCommentCount, addComment, viewerName, viewerRole } =
+    useAnnouncementEngagement(announcement, isStaffContext)
 
   const isLong = announcement.content.length > announcement.excerpt.length + 20
   const mediaUrls = announcement.mediaUrls ?? []
@@ -158,7 +161,7 @@ export function AnnouncementPostCard({
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        {likeCount > 0 ? (
           <button
             type="button"
             onClick={() => setReactionsOpen(true)}
@@ -169,8 +172,7 @@ export function AnnouncementPostCard({
             <ReactionBubble reaction="love" className="size-5" />
             <ReactionBubble reaction="haha" className="size-5" />
           </button>
-          <span>{shareCount} shares</span>
-        </div>
+        ) : null}
       </div>
 
       <div className="mx-4 border-t border-border" />
@@ -224,6 +226,7 @@ export function AnnouncementPostCard({
         viewerName={viewerName}
         viewerRole={viewerRole}
         onAddComment={addComment}
+        isStaffContext={isStaffContext}
       />
 
       <AnnouncementReactionsDialog
@@ -241,6 +244,7 @@ export function AnnouncementPostCard({
           announcement={announcement}
           mediaUrls={mediaUrls}
           startIndex={lightboxIndex}
+          isStaffContext={isStaffContext}
         />
       ) : null}
     </article>

@@ -5,6 +5,7 @@ import { ChevronDown, Image as ImageIcon, Send, Smile } from "lucide-react"
 import { InitialsAvatar } from "@/components/shared/initials-avatar"
 import { Input } from "@/components/ui/input"
 import { CommentRow } from "@/components/public/comment-row"
+import { useAuthStore } from "@/lib/stores/auth-store"
 import type { CommentAuthorRole, UserComment } from "@/lib/stores/engagement-store"
 import type { SeededComment } from "@/lib/seeded-comments"
 
@@ -16,6 +17,8 @@ interface AnnouncementCommentPanelProps {
   viewerRole?: CommentAuthorRole
   onAddComment: (text: string) => void
   className?: string
+  /** True only inside the staff/admin dashboard -- see useAnnouncementEngagement. */
+  isStaffContext?: boolean
 }
 
 export function AnnouncementCommentPanel({
@@ -26,8 +29,11 @@ export function AnnouncementCommentPanel({
   viewerRole,
   onAddComment,
   className,
+  isStaffContext = false,
 }: AnnouncementCommentPanelProps) {
   const [draft, setDraft] = React.useState("")
+  const session = useAuthStore((s) => s.session)
+  const viewerAvatarUrl = isStaffContext ? session?.avatarUrl : undefined
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -55,9 +61,10 @@ export function AnnouncementCommentPanel({
             role={c.authorRole}
             text={c.text}
             timeLabel="Just now"
-            isYou
+            authorViewerKey={c.viewerKey}
             viewerName={viewerName}
             viewerRole={viewerRole}
+            isStaffContext={isStaffContext}
           />
         ))}
 
@@ -70,12 +77,14 @@ export function AnnouncementCommentPanel({
             timeLabel={`${c.timeLabel} ago`}
             viewerName={viewerName}
             viewerRole={viewerRole}
+            isStaffContext={isStaffContext}
+            isSeeded
           />
         ))}
       </div>
 
       <form onSubmit={submit} className="flex shrink-0 items-center gap-2 border-t border-border p-3">
-        <InitialsAvatar name={viewerName} size="sm" />
+        <InitialsAvatar name={viewerName} photoUrl={viewerAvatarUrl} size="sm" />
         <div className="relative flex-1">
           <Input
             value={draft}

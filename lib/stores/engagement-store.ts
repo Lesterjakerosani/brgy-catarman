@@ -11,6 +11,9 @@ export interface EngagementReply {
   role?: CommentAuthorRole
   text: string
   createdAt: string
+  /** The poster's viewer key (see useViewerKey), used to correctly show "(You)"
+   * only to the account that actually posted this reply. */
+  viewerKey?: string
 }
 
 export interface UserComment {
@@ -19,6 +22,15 @@ export interface UserComment {
   authorName: string
   authorRole?: CommentAuthorRole
   createdAt: string
+  /** The poster's viewer key (see useViewerKey), used to correctly show "(You)"
+   * only to the account that actually posted this comment. */
+  viewerKey?: string
+}
+
+/** Reaction maps are keyed by `${viewerKey}:${postOrCommentId}` so each
+ * viewer's reaction is independent -- see useViewerKey. */
+function reactionKey(viewerKey: string, id: string): string {
+  return `${viewerKey}:${id}`
 }
 
 interface EngagementState {
@@ -26,10 +38,10 @@ interface EngagementState {
   commentReactions: Record<string, ReactionKey>
   userComments: Record<string, UserComment[]>
   commentReplies: Record<string, EngagementReply[]>
-  setPostReaction: (announcementId: string, reaction: ReactionKey | null) => void
-  setCommentReaction: (commentId: string, reaction: ReactionKey | null) => void
-  addUserComment: (announcementId: string, text: string, authorName: string, authorRole?: CommentAuthorRole) => void
-  addCommentReply: (commentId: string, text: string, authorName: string, authorRole?: CommentAuthorRole) => void
+  setPostReaction: (viewerKey: string, announcementId: string, reaction: ReactionKey | null) => void
+  setCommentReaction: (viewerKey: string, commentId: string, reaction: ReactionKey | null) => void
+  addUserComment: (announcementId: string, text: string, authorName: string, authorRole: CommentAuthorRole | undefined, viewerKey: string) => void
+  addCommentReply: (commentId: string, text: string, authorName: string, authorRole: CommentAuthorRole | undefined, viewerKey: string) => void
   renameAuthor: (oldName: string, newName: string) => void
 }
 
@@ -40,21 +52,23 @@ export const useEngagementStore = create<EngagementState>()(
       commentReactions: {},
       userComments: {},
       commentReplies: {},
-      setPostReaction: (announcementId, reaction) =>
+      setPostReaction: (viewerKey, announcementId, reaction) =>
         set((state) => {
+          const key = reactionKey(viewerKey, announcementId)
           const next = { ...state.postReactions }
-          if (reaction) next[announcementId] = reaction
-          else delete next[announcementId]
+          if (reaction) next[key] = reaction
+          else delete next[key]
           return { postReactions: next }
         }),
-      setCommentReaction: (commentId, reaction) =>
+      setCommentReaction: (viewerKey, commentId, reaction) =>
         set((state) => {
+          const key = reactionKey(viewerKey, commentId)
           const next = { ...state.commentReactions }
-          if (reaction) next[commentId] = reaction
-          else delete next[commentId]
+          if (reaction) next[key] = reaction
+          else delete next[key]
           return { commentReactions: next }
         }),
-      addUserComment: (announcementId, text, authorName, authorRole) =>
+      addUserComment: (announcementId, text, authorName, authorRole, viewerKey) =>
         set((state) => {
           const existing = state.userComments[announcementId] ?? []
           const comment: UserComment = {
@@ -63,6 +77,7 @@ export const useEngagementStore = create<EngagementState>()(
             authorName,
             authorRole,
             createdAt: new Date().toISOString(),
+            viewerKey,
           }
           return {
             userComments: {
@@ -71,7 +86,7 @@ export const useEngagementStore = create<EngagementState>()(
             },
           }
         }),
-      addCommentReply: (commentId, text, authorName, authorRole) =>
+      addCommentReply: (commentId, text, authorName, authorRole, viewerKey) =>
         set((state) => {
           const existing = state.commentReplies[commentId] ?? []
           const reply: EngagementReply = {
@@ -80,6 +95,7 @@ export const useEngagementStore = create<EngagementState>()(
             role: authorRole,
             text,
             createdAt: new Date().toISOString(),
+            viewerKey,
           }
           return {
             commentReplies: {
@@ -104,6 +120,34 @@ export const useEngagementStore = create<EngagementState>()(
           ),
         })),
     }),
-    { name: "catarman-engagement-store", storage: idbJSONStorage }
+    {
+      name: "catarman-engagement-store",
+      storage: idbJSONStorage,
+      version: 1,
+      migrate: (persisted) => {
+        const state = persisted as EngagementState
+        // Older versions stored anonymous residents' name as the literal
+        // string "You" -- a viewer-relative word baked in as permanent data,
+        // which made every future viewer (including staff/admin) see it as
+        // if it were their own comment. Correct any already-saved records.
+        if (state?.userComments) {
+          state.userComments = Object.fromEntries(
+            Object.entries(state.userComments).map(([announcementId, comments]) => [
+              announcementId,
+              comments.map((c) => (!c.authorRole && c.authorName === "You" ? { ...c, authorName: "Resident" } : c)),
+            ])
+          )
+        }
+        if (state?.commentReplies) {
+          state.commentReplies = Object.fromEntries(
+            Object.entries(state.commentReplies).map(([commentId, replies]) => [
+              commentId,
+              replies.map((r) => (!r.role && r.name === "You" ? { ...r, name: "Resident" } : r)),
+            ])
+          )
+        }
+        return state
+      },
+    }
   )
 )

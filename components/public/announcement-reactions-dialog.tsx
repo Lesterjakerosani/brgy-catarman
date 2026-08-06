@@ -20,6 +20,11 @@ interface Reactor {
 }
 
 export function reactionBreakdown(id: string, total: number, userReaction: ReactionKey | null) {
+  if (total <= 0) {
+    if (!userReaction) return []
+    return [[userReaction, 1]] as [ReactionKey, number][]
+  }
+
   const loveShare = seededInt(id + "lv", 15, 35)
   const hahaShare = seededInt(id + "ha", 5, 20)
   const loveCount = Math.max(1, Math.round((total * loveShare) / 100))

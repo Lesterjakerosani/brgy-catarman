@@ -35,9 +35,11 @@ interface AnnouncementLightboxProps {
   announcement: Announcement
   mediaUrls: string[]
   startIndex: number
+  /** True only inside the staff/admin dashboard -- see useAnnouncementEngagement. */
+  isStaffContext?: boolean
 }
 
-export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUrls, startIndex }: AnnouncementLightboxProps) {
+export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUrls, startIndex, isStaffContext = false }: AnnouncementLightboxProps) {
   const [index, setIndex] = React.useState(startIndex)
   const [scale, setScale] = React.useState(1)
   const [rotation, setRotation] = React.useState(0)
@@ -48,8 +50,8 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
   const touchStartX = React.useRef<number | null>(null)
   const viewerRef = React.useRef<HTMLDivElement>(null)
 
-  const { likeCount, shareCount, reaction, pickReaction, seededComments, myComments, totalCommentCount, addComment, viewerName, viewerRole } =
-    useAnnouncementEngagement(announcement)
+  const { likeCount, reaction, pickReaction, seededComments, myComments, totalCommentCount, addComment, viewerName, viewerRole } =
+    useAnnouncementEngagement(announcement, isStaffContext)
 
   const current = mediaUrls[index]
 
@@ -281,9 +283,8 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-border pt-2 text-xs text-muted-foreground">
+              <div className="border-t border-border pt-2 text-xs text-muted-foreground">
                 <span>{totalCommentCount} comments</span>
-                <span>{shareCount} shares</span>
               </div>
 
               <div className="grid grid-cols-3 gap-1 border-t border-border pt-2">
@@ -337,6 +338,7 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
               viewerName={viewerName}
               viewerRole={viewerRole}
               onAddComment={addComment}
+              isStaffContext={isStaffContext}
             />
           </div>
         </div>
