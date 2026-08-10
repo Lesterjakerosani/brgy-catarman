@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,4 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-certificates
+# local dev TLS certs only -- anchored to frontend root so it doesn't match
+# real app paths like app/dashboard/certificates/ or components/.../certificates/
+/certificates
