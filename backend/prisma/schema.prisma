@@ -807,6 +807,8 @@ model SystemSettings {
   themeAccentColor     String?
   claimDeadlineDays    Int      @default(30)
   autoExpireHours      Int      @default(72)
+  maintenanceMode      Boolean  @default(false)
+  maintenanceMessage   String?  @db.Text
   updatedById          String?  @db.Uuid
   updatedAt            DateTime @updatedAt
 

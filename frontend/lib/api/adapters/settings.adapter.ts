@@ -7,6 +7,7 @@ export function toSystemSettings(raw: Record<string, unknown>): SystemSettings {
   const str = (v: unknown) => (typeof v === "string" ? v : "")
   const arr = (v: unknown) => (Array.isArray(v) ? (v as string[]) : [])
   const num = (v: unknown, fallback: number) => (typeof v === "number" ? v : fallback)
+  const bool = (v: unknown) => v === true
 
   return {
     barangayName: str(raw.barangayName) || "Barangay Catarman",
@@ -41,5 +42,7 @@ export function toSystemSettings(raw: Record<string, unknown>): SystemSettings {
     themeAccentColor: str(raw.themeAccentColor),
     claimDeadlineDays: num(raw.claimDeadlineDays, 30),
     autoExpireHours: num(raw.autoExpireHours, 72),
+    maintenanceMode: bool(raw.maintenanceMode),
+    maintenanceMessage: str(raw.maintenanceMessage),
   }
 }

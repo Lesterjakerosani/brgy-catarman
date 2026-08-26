@@ -24,9 +24,9 @@ export function AnnouncementTicker() {
           <Megaphone className="size-3.5" />
           Latest
         </span>
-        <div className="relative min-w-0 flex-1 overflow-hidden">
-          <div className="flex w-max animate-marquee gap-10 whitespace-nowrap text-xs text-white/75">
-            {[...feed, ...feed].map((title, i) => (
+        <div className="relative h-9 min-w-0 flex-1 overflow-hidden">
+          <div className="absolute inset-y-0 flex w-max animate-marquee items-center gap-10 whitespace-nowrap text-xs text-white/75">
+            {feed.map((title, i) => (
               <span key={i} className="flex items-center gap-2">
                 <span className="size-1 shrink-0 rounded-full bg-gold/60" />
                 {title}

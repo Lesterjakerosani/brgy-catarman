@@ -42,19 +42,21 @@ export function Footer() {
               The official digital platform of Barangay Catarman for requesting documents, reporting incidents, and
               staying connected with community programs and announcements.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              <a
-                href={systemSettings.facebookUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-gold hover:text-gold-foreground"
-                aria-label="Facebook"
-              >
-                <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
-                  <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.45-.13-2.43 0-4.1 1.48-4.1 4.2v2.3H7.4V13h2.75v8h3.35Z" />
-                </svg>
-              </a>
-            </div>
+            {systemSettings.facebookUrl ? (
+              <div className="mt-5 flex items-center gap-3">
+                <a
+                  href={systemSettings.facebookUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-gold hover:text-gold-foreground"
+                  aria-label="Facebook"
+                >
+                  <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                    <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.45-.13-2.43 0-4.1 1.48-4.1 4.2v2.3H7.4V13h2.75v8h3.35Z" />
+                  </svg>
+                </a>
+              </div>
+            ) : null}
           </div>
 
           <div>

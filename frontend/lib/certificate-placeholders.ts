@@ -257,8 +257,26 @@ interface RenderOptions {
   residentPhotoUrl?: string
 }
 
+/** Renders the barangay/municipal logos as an automatic letterhead-style
+ * header at the top of the document -- driven purely by the Show
+ * Barangay/Municipal Logo toggles, independent of whether the template body
+ * happens to also contain a manually-placed {{barangay_logo}}/
+ * {{municipal_logo}} token (that inline mechanism still works too, for
+ * anyone who wants a logo mark somewhere specific inside the body text). */
+function logoHeader(options: RenderOptions): string {
+  const municipal = options.showMunicipalLogo ? municipalLogoSvg(options.municipalLogoUrl, options.logoSize, options.municipalityName) : ""
+  const barangay = options.showBarangayLogo ? logoSvg(options.barangayLogoUrl, options.logoSize) : ""
+  const logos = [municipal, barangay].filter(Boolean)
+  if (logos.length === 0) return ""
+  // Two logos sit flush at the page's left/right margins (like a real
+  // letterhead); a single logo stays centered, matching how it looked before
+  // the second one was ever turned on.
+  const justify = logos.length > 1 ? "space-between" : "center"
+  return `<div style="display:flex;align-items:center;justify-content:${justify};width:100%;margin-bottom:20px;">${logos.join("")}</div>`
+}
+
 export function renderTemplateHtml(bodyHtml: string, data: SampleCertificateData, options: RenderOptions): string {
-  let html = bodyHtml
+  let html = logoHeader(options) + bodyHtml
 
   for (const group of PLACEHOLDER_GROUPS) {
     for (const { token } of group.items) {

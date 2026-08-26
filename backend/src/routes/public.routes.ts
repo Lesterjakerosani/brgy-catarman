@@ -9,6 +9,7 @@ import * as dashboardController from "../controllers/dashboard.controller";
 import * as aiAssistantController from "../controllers/aiAssistant.controller";
 import { publicLimiter, authLimiter, aiAssistantLimiter } from "../middlewares/rateLimiter.middleware";
 import { optionalAuth } from "../middlewares/auth.middleware";
+import { maintenanceGuard } from "../middlewares/maintenanceGuard.middleware";
 import { validateMiddleware } from "../middlewares/validate.middleware";
 import { uploadSingle } from "../middlewares/upload.middleware";
 import { publicCertificateRequestValidator } from "../validators/certificate.validators";
@@ -34,6 +35,7 @@ router.post(
 router.post(
   "/certificate-requests",
   authLimiter,
+  maintenanceGuard,
   publicCertificateRequestValidator,
   validateMiddleware,
   certificateRequestController.submitPublicCertificateRequest,
@@ -47,6 +49,7 @@ router.get(
 router.post(
   "/certificate-requests/:id/requirements",
   authLimiter,
+  maintenanceGuard,
   uploadSingle("certificates", "file"),
   certificateRequestController.uploadCertificateRequirement,
 );
@@ -54,6 +57,7 @@ router.post(
 router.post(
   "/complaints",
   authLimiter,
+  maintenanceGuard,
   submitComplaintValidator,
   validateMiddleware,
   complaintController.submitComplaint,
@@ -64,6 +68,7 @@ router.get("/complaints/track/:referenceNumber", complaintController.trackCompla
 router.post(
   "/complaints/:id/photos",
   authLimiter,
+  maintenanceGuard,
   uploadSingle("complaints", "photo"),
   addPhotoValidator,
   validateMiddleware,
@@ -83,6 +88,7 @@ router.post(
   // announcement.routes.ts.
   "/announcements/:id/comments",
   authLimiter,
+  maintenanceGuard,
   commentValidator,
   validateMiddleware,
   announcementController.addComment,
@@ -90,6 +96,7 @@ router.post(
 router.post(
   "/comments/:commentId/replies",
   authLimiter,
+  maintenanceGuard,
   commentValidator,
   validateMiddleware,
   announcementController.addReply,
@@ -97,6 +104,7 @@ router.post(
 router.put(
   "/announcements/:id/reaction",
   authLimiter,
+  maintenanceGuard,
   optionalAuth,
   reactionValidator,
   validateMiddleware,
@@ -105,6 +113,7 @@ router.put(
 router.put(
   "/comments/:commentId/reaction",
   authLimiter,
+  maintenanceGuard,
   optionalAuth,
   reactionValidator,
   validateMiddleware,
@@ -118,6 +127,7 @@ router.get("/settings", settingsController.getPublicSettings);
 router.post(
   "/contact",
   authLimiter,
+  maintenanceGuard,
   contactFormValidator,
   validateMiddleware,
   settingsController.submitContactForm,

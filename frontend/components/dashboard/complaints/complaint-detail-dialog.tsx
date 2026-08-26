@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { Timeline } from "@/components/shared/timeline"
+import { ImageLightbox } from "@/components/shared/image-lightbox"
 import { useUpdateComplaintStatus } from "@/lib/api/hooks/use-complaints"
 import { formatDate } from "@/lib/format"
 import type { Complaint } from "@/types"
@@ -16,6 +17,7 @@ import type { Complaint } from "@/types"
 export function ComplaintDetailDialog({ open, onOpenChange, complaint }: { open: boolean; onOpenChange: (open: boolean) => void; complaint?: Complaint }) {
   const updateStatus = useUpdateComplaintStatus()
   const [notes, setNotes] = React.useState("")
+  const [lightboxUrl, setLightboxUrl] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     if (open) setNotes(complaint?.staffNotes ?? "")
@@ -46,8 +48,15 @@ export function ComplaintDetailDialog({ open, onOpenChange, complaint }: { open:
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Reporter (Confidential)</p>
             <div className="flex items-center gap-3 rounded-lg border border-border p-3">
               {complaint.reporterPhotoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={complaint.reporterPhotoUrl} alt="Reporter verification" className="size-16 rounded-lg object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setLightboxUrl(complaint.reporterPhotoUrl!)}
+                  className="shrink-0 cursor-zoom-in transition-opacity hover:opacity-80"
+                  aria-label="View full-size reporter photo"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={complaint.reporterPhotoUrl} alt="Reporter verification" className="size-16 rounded-lg object-cover" />
+                </button>
               ) : (
                 <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                   <Eye className="size-5" />
@@ -138,6 +147,8 @@ export function ComplaintDetailDialog({ open, onOpenChange, complaint }: { open:
           </div>
         </DialogFooter>
       </DialogContent>
+
+      {lightboxUrl ? <ImageLightbox url={lightboxUrl} alt="Reporter verification" onClose={() => setLightboxUrl(null)} /> : null}
     </Dialog>
   )
 }

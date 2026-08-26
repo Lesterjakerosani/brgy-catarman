@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
-import { Building, Mail, Palette, Pencil, Phone, Plus, Trash2, Users2 } from "lucide-react"
+import { Building, Mail, Palette, Pencil, Phone, Plus, Trash2, Users2, Wrench } from "lucide-react"
 import { PageHeader } from "@/components/shared/page-header"
 import { InitialsAvatar } from "@/components/shared/initials-avatar"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileDropzone } from "@/components/shared/file-dropzone"
@@ -109,6 +110,11 @@ function SystemSettingsPage() {
     toast.success("Theme colors applied.")
   }
 
+  function saveMaintenance(enabled: boolean, message: string) {
+    updateSettings({ maintenanceMode: enabled, maintenanceMessage: message })
+    toast.success(enabled ? "Maintenance mode enabled. The public site now shows a maintenance notice." : "Maintenance mode disabled. The public site is live again.")
+  }
+
   async function saveHeroBackground() {
     const heroBackgroundUrl = await resolveImageUrl(heroBg, settings.heroBackgroundUrl ?? "")
     updateSettings({ heroBackgroundUrl })
@@ -148,6 +154,10 @@ function SystemSettingsPage() {
           <TabsTrigger value="theme">
             <Palette className="size-4" />
             Theme & Branding
+          </TabsTrigger>
+          <TabsTrigger value="maintenance">
+            <Wrench className="size-4" />
+            Maintenance
           </TabsTrigger>
         </TabsList>
 
@@ -281,6 +291,11 @@ function SystemSettingsPage() {
                   <Label>Office Hours</Label>
                   <Input className="mt-1.5" {...register("officeHours")} />
                 </div>
+                <div>
+                  <Label>Facebook Page URL</Label>
+                  <Input className="mt-1.5" placeholder="https://facebook.com/YourBarangayPage" {...register("facebookUrl")} />
+                  <p className="mt-1 text-xs text-muted-foreground">Shown as the Facebook icon link in the public site&apos;s footer. Leave blank to hide it.</p>
+                </div>
                 <div className="rounded-lg border border-dashed border-border p-4">
                   <p className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-foreground">
                     <Mail className="size-4" />
@@ -369,6 +384,14 @@ function SystemSettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="maintenance">
+          <Card className="border-border/70">
+            <CardContent className="p-6">
+              <MaintenanceForm settings={settings} onSave={saveMaintenance} />
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
 
       <OfficialFormDialog open={officialFormOpen} onOpenChange={setOfficialFormOpen} official={editingOfficial} />
@@ -411,6 +434,48 @@ function ThemeColorForm({ settings, onSave }: { settings: SystemSettings; onSave
         </div>
       </div>
       <Button onClick={() => onSave(primary, accent)}>Apply Theme</Button>
+    </div>
+  )
+}
+
+function MaintenanceForm({ settings, onSave }: { settings: SystemSettings; onSave: (enabled: boolean, message: string) => void }) {
+  const [enabled, setEnabled] = React.useState(settings.maintenanceMode)
+  const [message, setMessage] = React.useState(settings.maintenanceMessage)
+
+  React.useEffect(() => {
+    setEnabled(settings.maintenanceMode)
+    setMessage(settings.maintenanceMessage)
+  }, [settings.maintenanceMode, settings.maintenanceMessage])
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4">
+        <div>
+          <p className="text-sm font-semibold text-foreground">Maintenance Mode</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            When turned on, residents visiting the public website see a maintenance notice instead of the site.
+            Staff and admin dashboard access is never affected — you can always log in and turn this back off.
+          </p>
+        </div>
+        <Switch checked={enabled} onCheckedChange={setEnabled} />
+      </div>
+      {enabled ? (
+        <p className="rounded-lg border border-gold/40 bg-gold/10 px-4 py-2.5 text-xs font-medium text-foreground">
+          Maintenance mode is ON — the public website is currently showing the maintenance notice below.
+        </p>
+      ) : null}
+      <div>
+        <Label>Maintenance Message (optional)</Label>
+        <Textarea
+          className="mt-1.5"
+          rows={3}
+          placeholder="We're performing scheduled maintenance to improve our services. Please check back shortly."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <p className="mt-1 text-xs text-muted-foreground">Shown to residents on the maintenance screen. Leave blank to use the default message.</p>
+      </div>
+      <Button onClick={() => onSave(enabled, message)}>Save Maintenance Settings</Button>
     </div>
   )
 }

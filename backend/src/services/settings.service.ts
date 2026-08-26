@@ -35,6 +35,8 @@ export interface SettingsInput {
   themeAccentColor?: string;
   claimDeadlineDays?: number;
   autoExpireHours?: number;
+  maintenanceMode?: boolean;
+  maintenanceMessage?: string;
 }
 
 // Operational fields (SMTP config) that must never reach an anonymous

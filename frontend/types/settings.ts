@@ -35,6 +35,8 @@ export interface SystemSettings {
   themeAccentColor: string
   claimDeadlineDays: number
   autoExpireHours: number
+  maintenanceMode: boolean
+  maintenanceMessage: string
 }
 
 export interface BackupRecord {

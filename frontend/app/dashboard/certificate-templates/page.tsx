@@ -19,12 +19,13 @@ import { ScaledDocumentPreview } from "@/components/shared/scaled-document-previ
 import { useCertificateTemplates, useAddCertificateTemplate, useUpdateCertificateTemplate } from "@/lib/api/hooks/use-certificate-templates"
 import { useAllCertificateRequests } from "@/lib/api/hooks/use-certificate-requests"
 import { useAllResidents } from "@/lib/api/hooks/use-residents"
-import { usePublicSettings, useUpdateSettings } from "@/lib/api/hooks/use-settings"
+import { usePublicSettings, useUpdateSettings, useUploadSettingsImage } from "@/lib/api/hooks/use-settings"
 import { usePublicOfficials } from "@/lib/api/hooks/use-officials"
 import { getDefaultTemplateBodyHtml } from "@/data/certificate-template-defaults"
 import { buildRequestData } from "@/lib/certificate-placeholders"
 import { mapDocumentTypeToTemplateType } from "@/lib/certificate-templates"
 import { exportElementAsPdf } from "@/lib/export-pdf"
+import { dataUrlToFile } from "@/lib/api/adapters/file.adapter"
 import type { CertificateTemplate, CertificateTemplateStatus, CertificateTemplateType, UploadedFile } from "@/types"
 
 const MIN_LOGO_SIZE = 40
@@ -55,6 +56,7 @@ function CertificateTemplatesPageContent() {
   const { residents } = useAllResidents()
   const { settings } = usePublicSettings()
   const updateSettingsMutation = useUpdateSettings()
+  const uploadSettingsImage = useUploadSettingsImage()
   const { officials } = usePublicOfficials()
 
   const activeRequest = requestId ? certificateRequests.find((r) => r.id === requestId) : undefined
@@ -73,12 +75,24 @@ function CertificateTemplatesPageContent() {
       : []
   )
 
-  function saveCertificateLogos() {
+  /** FileDropzone only ever produces local base64 data: URLs -- these must be
+   * uploaded to get a real, persistable URL before saving (matches the same
+   * fix already applied on the main System Settings page). */
+  async function resolveLogoUrl(files: UploadedFile[], fallback: string): Promise<string> {
+    const file = files[0]
+    if (!file) return fallback
+    if (!file.url.startsWith("data:")) return file.url
+    const { url } = await uploadSettingsImage.mutateAsync(dataUrlToFile(file.url, file.name))
+    return url
+  }
+
+  async function saveCertificateLogos() {
+    const [documentLogoUrl, municipalLogoUrl] = await Promise.all([
+      resolveLogoUrl(barangayLogoFiles, settings.documentLogoUrl ?? ""),
+      resolveLogoUrl(municipalLogoFiles, settings.municipalLogoUrl ?? ""),
+    ])
     updateSettingsMutation.mutate(
-      {
-        documentLogoUrl: barangayLogoFiles[0]?.url ?? settings.documentLogoUrl,
-        municipalLogoUrl: municipalLogoFiles[0]?.url ?? settings.municipalLogoUrl,
-      },
+      { documentLogoUrl, municipalLogoUrl },
       { onSuccess: () => toast.success("Logos updated.") },
     )
   }

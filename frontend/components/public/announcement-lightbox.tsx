@@ -8,13 +8,11 @@ import {
   Maximize,
   MessageCircle,
   RotateCw,
-  Share2,
   ThumbsUp,
   X,
   ZoomIn,
   ZoomOut,
 } from "lucide-react"
-import toast from "react-hot-toast"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { BarangaySeal } from "@/components/shared/barangay-seal"
 import { REACTIONS, ReactionBubble, reactionByKey } from "@/components/public/reaction-icons"
@@ -125,14 +123,6 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
     } else {
       void viewerRef.current?.requestFullscreen()
     }
-  }
-
-  function copyLink() {
-    const url = `${window.location.origin}/announcements#${announcement.id}`
-    navigator.clipboard.writeText(url).then(
-      () => toast.success("Link copied to clipboard."),
-      () => toast.error("Unable to copy link.")
-    )
   }
 
   return (
@@ -285,7 +275,7 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
                 <span>{totalCommentCount} comments</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-1 border-t border-border pt-2">
+              <div className="grid grid-cols-2 gap-1 border-t border-border pt-2">
                 <div className="relative" onMouseEnter={openPicker} onMouseLeave={scheduleClosePicker}>
                   {pickerOpen ? (
                     <div className="absolute bottom-full left-1/2 z-30 mb-1 flex -translate-x-1/2 items-center gap-1 rounded-full border border-border bg-card p-1.5 shadow-lg">
@@ -320,10 +310,6 @@ export function AnnouncementLightbox({ open, onOpenChange, announcement, mediaUr
                 <button type="button" className="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm font-semibold text-muted-foreground hover:bg-secondary">
                   <MessageCircle className="size-4" />
                   Comment
-                </button>
-                <button type="button" onClick={copyLink} className="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm font-semibold text-muted-foreground hover:bg-secondary">
-                  <Share2 className="size-4" />
-                  Share
                 </button>
               </div>
             </div>

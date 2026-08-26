@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { ArrowRight, Megaphone, Pin } from "lucide-react"
 import { usePublishedAnnouncements } from "@/lib/api/hooks/use-announcements"
@@ -11,6 +12,36 @@ import { formatDate } from "@/lib/format"
 import { isVideoUrl } from "@/lib/media-url"
 
 const MAX_THUMBNAILS = 4
+const URL_PATTERN = /(https?:\/\/[^\s<]+)/g
+
+/** excerpt is plain text (HTML already stripped server-side), so bare URLs
+ * in it are never real <a> tags -- wraps them as clickable links without
+ * ever treating the text as HTML (no dangerouslySetInnerHTML, no escaping
+ * concerns), unlike the full post view's rich-text content field. */
+function linkifyText(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  URL_PATTERN.lastIndex = 0
+  while ((match = URL_PATTERN.exec(text))) {
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index))
+    parts.push(
+      <a
+        key={match.index}
+        href={match[0]}
+        target="_blank"
+        rel="noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="text-primary underline"
+      >
+        {match[0]}
+      </a>
+    )
+    lastIndex = match.index + match[0].length
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex))
+  return parts
+}
 
 function AnnouncementThumbnailGrid({ urls }: { urls: string[] }) {
   const shown = urls.slice(0, MAX_THUMBNAILS)
@@ -73,7 +104,7 @@ export function AnnouncementsSection() {
                   <span className="text-xs text-muted-foreground">{formatDate(a.publishAt)}</span>
                 </div>
                 <h3 className="mt-3 break-words font-heading text-lg font-bold text-foreground">{a.title}</h3>
-                <p className="mt-2 line-clamp-3 flex-1 break-words text-sm leading-relaxed text-muted-foreground">{a.excerpt}</p>
+                <p className="mt-2 line-clamp-3 flex-1 break-words text-sm leading-relaxed text-muted-foreground">{linkifyText(a.excerpt)}</p>
                 {a.mediaUrls && a.mediaUrls.length > 0 ? <AnnouncementThumbnailGrid urls={a.mediaUrls} /> : null}
               </CardContent>
             </Card>

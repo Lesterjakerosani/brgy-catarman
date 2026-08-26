@@ -159,12 +159,20 @@
   }
 }
 
+/* "left" is relative to the ticker bar's own width, guaranteeing a correct
+   start position off-screen right regardless of text length. "transform" is
+   relative to the text's OWN width, so the additional -100% shift there
+   guarantees the text fully clears the screen on exit too -- without it, text
+   longer than the bar never finishes leaving before the loop resets, which
+   reads as the tail end getting visibly cut off mid-scroll. */
 @keyframes marquee {
   0% {
+    left: 100%;
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    left: -100%;
+    transform: translateX(-100%);
   }
 }
 
