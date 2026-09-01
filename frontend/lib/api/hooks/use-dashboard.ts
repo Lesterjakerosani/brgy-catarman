@@ -17,3 +17,29 @@ export function usePublicStats() {
   })
   return { stats: data, isLoading }
 }
+
+export interface RevenueBreakdownRow {
+  documentTypeId: string
+  name: string
+  price: string | number
+  count: number
+  revenue: string | number
+}
+
+export interface RevenueAnalytics {
+  totals: { today: string | number; month: string | number; year: string | number; allTime: string | number }
+  breakdown: {
+    today: RevenueBreakdownRow[]
+    month: RevenueBreakdownRow[]
+    year: RevenueBreakdownRow[]
+    allTime: RevenueBreakdownRow[]
+  }
+}
+
+export function useRevenueAnalytics() {
+  const { data, isLoading } = useQuery<RevenueAnalytics>({
+    queryKey: qk.dashboard.revenue,
+    queryFn: () => dashboardApi.revenue() as Promise<RevenueAnalytics>,
+  })
+  return { revenue: data, isLoading }
+}

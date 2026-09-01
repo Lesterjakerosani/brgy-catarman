@@ -18,7 +18,10 @@ export function AnnouncementTicker() {
   const feed = latest.length > 0 ? latest : ["Welcome to the e-Catarman online service portal."]
 
   return (
-    <div className="flex h-9 items-center justify-between gap-4 bg-[#050f24] px-4 text-white sm:px-6 lg:px-8">
+    <div
+      className="flex h-9 items-center justify-between gap-4 px-4 text-white sm:px-6 lg:px-8"
+      style={{ backgroundColor: "color-mix(in srgb, var(--primary) 85%, black)" }}
+    >
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gold">
           <Megaphone className="size-3.5" />

@@ -27,7 +27,10 @@ export function Footer() {
   const { emergencyContacts } = usePublicEmergencyContacts()
 
   return (
-    <footer className="border-t border-white/10 bg-[#050b16] text-white/80">
+    <footer
+      className="border-t border-white/10 text-white/80"
+      style={{ backgroundColor: "color-mix(in srgb, var(--primary) 85%, black)" }}
+    >
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
           <div className="lg:col-span-1">

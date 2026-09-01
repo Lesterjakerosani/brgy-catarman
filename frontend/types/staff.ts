@@ -34,4 +34,5 @@ export interface AuthSession {
   role: UserRole
   avatarUrl?: string
   position: string
+  securityQuestionsSet: boolean
 }

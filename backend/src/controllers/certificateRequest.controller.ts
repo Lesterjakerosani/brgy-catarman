@@ -32,7 +32,7 @@ export const submitWalkInCertificateRequest = asyncHandler(async (req: Request, 
 
 export const updateCertificateStatus = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
   const { status, rejectionReason, staffNotes, extendDays, claimedBy } = req.body as {
-    status: "PENDING" | "UNDER_REVIEW" | "APPROVED" | "REJECTED" | "READY_FOR_CLAIM" | "CLAIMED" | "NOT_CLAIMED" | "EXPIRED";
+    status: "PENDING" | "PROCESSING" | "APPROVED" | "REJECTED" | "READY_FOR_CLAIM" | "CLAIMED";
     rejectionReason?: string;
     staffNotes?: string;
     extendDays?: number;

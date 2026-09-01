@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { engagementRepository } from "../repositories/engagement.repository";
 import { announcementRepository } from "../repositories/announcement.repository";
+import { notificationRepository } from "../repositories/notification.repository";
 import { ApiError } from "../utils/apiError.util";
 import { activityLogService } from "./activityLog.service";
 
@@ -75,6 +76,15 @@ async function addComment(
       module: "ANNOUNCEMENTS",
       description: announcement.title,
     });
+  } else {
+    // Only anonymous/public comments notify staff -- a staff member
+    // commenting from the dashboard is already visible in the activity log.
+    await notificationRepository.create({
+      title: "New Comment",
+      message: `${comment.authorName} commented on "${announcement.title}"`,
+      type: "INFO",
+      link: "/dashboard/announcements",
+    });
   }
 
   return comment;
@@ -127,6 +137,21 @@ async function setReaction(
   if (reaction === null) {
     await engagementRepository.removeReaction(targetType, targetId, viewerKey);
     return null;
+  }
+
+  // Only anonymous/public reactions on the post itself notify staff -- not
+  // comment-level reactions (too granular) and not staff's own reactions
+  // (already covered by the activity log).
+  if (targetType === "POST" && !req.user) {
+    const announcement = await announcementRepository.findById(targetId);
+    if (announcement) {
+      await notificationRepository.create({
+        title: "New Reaction",
+        message: `Someone reacted to "${announcement.title}"`,
+        type: "INFO",
+        link: "/dashboard/announcements",
+      });
+    }
   }
 
   return engagementRepository.upsertReaction({

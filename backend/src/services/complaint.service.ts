@@ -1,12 +1,14 @@
 import { Request } from "express";
 import { complaintRepository, ComplaintListFilters } from "../repositories/complaint.repository";
+import { prisma } from "../config/prisma";
 import { parsePagination, toPaginationResult } from "../utils/pagination.util";
 import { ApiError } from "../utils/apiError.util";
 import { activityLogService } from "./activityLog.service";
+import { notificationRepository } from "../repositories/notification.repository";
 import { sendComplaintStatusEmail, sendComplaintSubmittedEmail } from "../utils/residentEmail.util";
 
 export interface ComplaintInput {
-  reporterName: string;
+  residentId: string;
   reporterPhone: string;
   reporterEmail: string;
   reportedPerson?: string;
@@ -50,8 +52,17 @@ async function trackByReference(referenceNumber: string) {
 }
 
 async function submit(input: ComplaintInput, req: Request) {
+  const resident = await prisma.resident.findFirst({ where: { id: input.residentId, deletedAt: null } });
+  if (!resident) {
+    throw ApiError.badRequest("We couldn't find that resident record. Please select your name from the list.");
+  }
+  const reporterName = [resident.firstName, resident.middleName, resident.lastName, resident.suffix]
+    .filter(Boolean)
+    .join(" ");
+
   const complaint = await complaintRepository.create({
     ...input,
+    reporterName,
     incidentDate: new Date(input.incidentDate),
     isConfidential: true,
     status: "NEW",
@@ -62,6 +73,15 @@ async function submit(input: ComplaintInput, req: Request) {
     action: "New incident report submitted",
     module: "COMPLAINTS",
     description: complaint.referenceNumber,
+  });
+
+  // Reporter identity stays out of the notification text -- complaints are
+  // confidential by design, and staff can see full details via the link.
+  await notificationRepository.create({
+    title: "New Incident Report",
+    message: `A new incident report was submitted (Ref: ${complaint.referenceNumber})`,
+    type: "WARNING",
+    link: "/dashboard/complaints",
   });
 
   await sendComplaintSubmittedEmail({

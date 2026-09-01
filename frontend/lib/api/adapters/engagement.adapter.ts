@@ -6,6 +6,7 @@ export interface EngagementReply {
   id: string
   name: string
   role?: CommentAuthorRole
+  avatarUrl?: string
   text: string
   createdAt: string
   viewerKey?: string
@@ -17,6 +18,7 @@ export interface EngagementComment {
   text: string
   authorName: string
   authorRole?: CommentAuthorRole
+  authorAvatarUrl?: string
   createdAt: string
   viewerKey?: string
   authorId?: string
@@ -53,6 +55,7 @@ interface BackendReply {
   text: string
   authorName: string
   authorRole?: string | null
+  author?: { avatarUrl?: string | null } | null
   createdAt: string
   viewerKey?: string | null
   authorId?: string | null
@@ -63,6 +66,7 @@ interface BackendComment {
   text: string
   authorName: string
   authorRole?: string | null
+  author?: { avatarUrl?: string | null } | null
   createdAt: string
   viewerKey?: string | null
   authorId?: string | null
@@ -77,6 +81,7 @@ export function fromBackendComment(dto: BackendComment): EngagementComment {
     text: dto.text,
     authorName: dto.authorName,
     authorRole: dto.authorRole ? ROLE_FROM_BACKEND[dto.authorRole] : undefined,
+    authorAvatarUrl: dto.author?.avatarUrl ?? undefined,
     createdAt: dto.createdAt,
     viewerKey: dto.viewerKey ?? undefined,
     authorId: dto.authorId ?? undefined,
@@ -84,6 +89,7 @@ export function fromBackendComment(dto: BackendComment): EngagementComment {
       id: r.id,
       name: r.authorName,
       role: r.authorRole ? ROLE_FROM_BACKEND[r.authorRole] : undefined,
+      avatarUrl: r.author?.avatarUrl ?? undefined,
       text: r.text,
       createdAt: r.createdAt,
       viewerKey: r.viewerKey ?? undefined,

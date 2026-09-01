@@ -4,7 +4,10 @@ export const engagementRepository = {
   listCommentsForAnnouncement(announcementId: string) {
     return prisma.comment.findMany({
       where: { announcementId },
-      include: { replies: { orderBy: { createdAt: "asc" } } },
+      include: {
+        author: { select: { avatarUrl: true } },
+        replies: { orderBy: { createdAt: "asc" }, include: { author: { select: { avatarUrl: true } } } },
+      },
       orderBy: { createdAt: "asc" },
     });
   },

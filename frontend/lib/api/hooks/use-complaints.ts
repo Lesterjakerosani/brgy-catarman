@@ -34,6 +34,7 @@ export function useSubmitComplaint() {
     {
       values: {
         reporterName: string
+        residentId: string
         reporterPhone: string
         reporterEmail: string
         reportedPerson?: string

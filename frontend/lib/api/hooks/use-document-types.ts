@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { documentTypesApi } from "@/lib/api/endpoints"
 import { qk } from "@/lib/api/query-keys"
+import { useApiMutation } from "@/lib/api/mutation-helpers"
 
 export interface BackendDocumentType {
   id: string
@@ -34,4 +35,15 @@ export function usePublicDocumentTypes() {
 
 export function documentTypeIdByName(name: string, documentTypes: BackendDocumentType[]): string | undefined {
   return documentTypes.find((d) => d.name === name)?.id
+}
+
+export function useUpdateDocumentTypeFee() {
+  const queryClient = useQueryClient()
+  return useApiMutation<unknown, { id: string; fee: number }>({
+    mutationFn: ({ id, fee }) => documentTypesApi.update(id, { fee }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: qk.documentTypes.all })
+    },
+    successMessage: "Price updated.",
+  })
 }

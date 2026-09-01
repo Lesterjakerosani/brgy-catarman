@@ -1,7 +1,11 @@
 import { body } from "express-validator";
 
 export const submitComplaintValidator = [
-  body("reporterName").isString().trim().notEmpty(),
+  // No residentId in the system means no account to report under -- reporter
+  // identity must be tied to a real, registered resident record. The name on
+  // the report is derived server-side from that record, not trusted as free
+  // text.
+  body("residentId").isUUID().withMessage("Please select your name from the list of registered residents."),
   body("reporterPhone").isString().trim().notEmpty(),
   body("reporterEmail").isEmail(),
   body("reportedPerson").optional().isString(),

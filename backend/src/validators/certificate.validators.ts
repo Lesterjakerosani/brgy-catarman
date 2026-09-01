@@ -32,16 +32,28 @@ export const publicCertificateRequestValidator = [
   body("residentId").optional().isUUID(),
 ];
 
+// Used only for the anonymous online-submission route (not walk-in, where
+// staff may be recording a request for someone not yet in the system).
+// Requires residentId so every online request must be tied to a real,
+// registered resident record -- the name shown on the request is then
+// derived server-side from that record, not trusted as free text.
+export const onlineCertificateRequestValidator = [
+  body("documentTypeId").isUUID(),
+  body("address").isString().trim().notEmpty(),
+  body("contactNumber").isString().trim().notEmpty(),
+  body("email").isEmail(),
+  body("purpose").isString().trim().notEmpty(),
+  body("residentId").isUUID().withMessage("Please select your name from the list of registered residents."),
+];
+
 export const updateCertificateStatusValidator = [
   body("status").isIn([
     "PENDING",
-    "UNDER_REVIEW",
+    "PROCESSING",
     "APPROVED",
     "REJECTED",
     "READY_FOR_CLAIM",
     "CLAIMED",
-    "NOT_CLAIMED",
-    "EXPIRED",
   ]),
   body("rejectionReason").optional().isString(),
   body("staffNotes").optional().isString(),

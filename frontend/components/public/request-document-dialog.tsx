@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { FileDropzone } from "@/components/shared/file-dropzone"
 import { RecaptchaCheckbox } from "@/components/shared/recaptcha-checkbox"
+import { ResidentPickerField, type ResidentPickerValue } from "@/components/shared/resident-picker-field"
 import { DOCUMENT_TYPES } from "@/data/certificates"
 import { useSubmitPublicCertificateRequest } from "@/lib/api/hooks/use-certificate-requests"
 import { usePublicDocumentTypes } from "@/lib/api/hooks/use-document-types"
@@ -24,7 +25,6 @@ const requestSchema = z
   .object({
     documentType: z.enum(DOCUMENT_TYPES),
     otherDocumentLabel: z.string().optional(),
-    requestorName: z.string().min(2, "Please enter your full name."),
     address: z.string().min(5, "Please enter your complete address."),
     contactNumber: z.string().min(7, "Please enter a valid contact number."),
     email: z.email("Please enter a valid email address."),
@@ -47,6 +47,7 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
   const [sanitaryCard, setSanitaryCard] = React.useState<UploadedFile[]>([])
   const [otherDocs, setOtherDocs] = React.useState<UploadedFile[]>([])
   const [verified, setVerified] = React.useState(false)
+  const [selectedResident, setSelectedResident] = React.useState<ResidentPickerValue | null>(null)
   const [requirementsError, setRequirementsError] = React.useState<string | null>(null)
   const [phase, setPhase] = React.useState<"form" | "success">("form")
   const [referenceNumber, setReferenceNumber] = React.useState("")
@@ -56,7 +57,6 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
     defaultValues: {
       documentType: "Barangay Certificate",
       otherDocumentLabel: "",
-      requestorName: "",
       address: "",
       contactNumber: "",
       email: "",
@@ -75,12 +75,17 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
       setSanitaryCard([])
       setOtherDocs([])
       setVerified(false)
+      setSelectedResident(null)
       setRequirementsError(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   async function onSubmit(values: RequestValues) {
+    if (!selectedResident) {
+      setRequirementsError("Please select your name from the resident list. Only names on record in our household/resident database can submit a request.")
+      return
+    }
     if (validId.length === 0) {
       setRequirementsError("Please upload a valid ID to proceed with your request.")
       return
@@ -93,7 +98,11 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
 
     const requirements = [...validId, ...purokCert, ...sanitaryCard, ...otherDocs]
     try {
-      const request = await submitPublicRequest.mutateAsync({ values, requirements, documentTypes })
+      const request = await submitPublicRequest.mutateAsync({
+        values: { ...values, requestorName: selectedResident.fullName, residentId: selectedResident.id },
+        requirements,
+        documentTypes,
+      })
       setReferenceNumber(request.referenceNumber)
       setPhase("success")
     } catch (err) {
@@ -239,34 +248,27 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
                   <p className="text-sm text-muted-foreground">Please provide your complete and accurate information.</p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="requestorName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Juan Dela Cruz" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="contactNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Contact Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="0917 234 5678" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <div className="space-y-2">
+                  <FormLabel>Full Name</FormLabel>
+                  <ResidentPickerField value={selectedResident} onChange={setSelectedResident} />
+                  <p className="text-sm text-muted-foreground">
+                    Search and select your name as registered in our household/resident records. Only registered residents can submit a request.
+                  </p>
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="contactNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="0917 234 5678" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}

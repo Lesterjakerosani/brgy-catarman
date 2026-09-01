@@ -64,6 +64,22 @@ export const certificateRequestRepository = {
     });
   },
 
+  /** Finds an already-in-progress request from the same resident for the
+   * same document type, so a new submission can be blocked as a duplicate.
+   * REJECTED/CLAIMED don't count -- those are resolved, so a fresh request
+   * for the same document is legitimate (e.g. renewal). */
+  findActiveDuplicate(residentId: string, documentTypeId: string) {
+    return prisma.certificateRequest.findFirst({
+      where: {
+        deletedAt: null,
+        residentId,
+        documentTypeId,
+        status: { in: ["PENDING", "PROCESSING", "APPROVED", "READY_FOR_CLAIM"] },
+      },
+      orderBy: { submittedAt: "desc" },
+    });
+  },
+
   count() {
     return prisma.certificateRequest.count({ where: { deletedAt: null } });
   },

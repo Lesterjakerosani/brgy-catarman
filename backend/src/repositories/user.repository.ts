@@ -89,12 +89,7 @@ export const userRepository = {
   updatePassword(id: string, passwordHash: string) {
     return prisma.user.update({
       where: { id },
-      data: {
-        passwordHash,
-        mustChangePassword: false,
-        resetPasswordTokenHash: null,
-        resetPasswordExpiresAt: null,
-      },
+      data: { passwordHash, mustChangePassword: false },
     });
   },
 
@@ -105,16 +100,10 @@ export const userRepository = {
     });
   },
 
-  setResetToken(id: string, tokenHash: string, expiresAt: Date) {
-    return prisma.user.update({
-      where: { id },
-      data: { resetPasswordTokenHash: tokenHash, resetPasswordExpiresAt: expiresAt },
-    });
-  },
-
-  findByResetTokenHash(tokenHash: string) {
-    return prisma.user.findFirst({
-      where: { resetPasswordTokenHash: tokenHash, resetPasswordExpiresAt: { gt: new Date() }, deletedAt: null },
-    });
+  setSecurityQuestions(
+    id: string,
+    data: { securityQuestion1: string; securityAnswer1Hash: string; securityQuestion2: string; securityAnswer2Hash: string },
+  ) {
+    return prisma.user.update({ where: { id }, data });
   },
 };

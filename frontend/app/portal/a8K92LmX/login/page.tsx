@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { motion } from "framer-motion"
-import toast from "react-hot-toast"
 import { ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,8 +14,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { BarangaySeal } from "@/components/shared/barangay-seal"
 import { Particles } from "@/components/public/sections/particles"
+import { ForgotPasswordDialog } from "@/components/shared/forgot-password-dialog"
 import { useLogin } from "@/lib/api/hooks/use-auth"
 import { usePublicSettings } from "@/lib/api/hooks/use-settings"
+import { ApiError } from "@/lib/api/types"
+
+const RATE_LIMIT_COOLDOWN_SECONDS = 60
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address."),
@@ -31,24 +34,42 @@ export default function LoginPage() {
   const login = useLogin()
   const { settings } = usePublicSettings()
   const [formError, setFormError] = React.useState<string | null>(null)
+  const [cooldown, setCooldown] = React.useState(0)
+  const [forgotPasswordOpen, setForgotPasswordOpen] = React.useState(false)
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "", rememberMe: true },
   })
 
+  React.useEffect(() => {
+    if (cooldown <= 0) return
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          setFormError(null)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [cooldown])
+
   async function onSubmit(values: LoginValues) {
     try {
       await login.mutateAsync(values)
       setFormError(null)
+      setCooldown(0)
       router.push("/dashboard/overview")
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Unable to log in. Please try again.")
+      if (err instanceof ApiError && err.status === 429) {
+        setFormError(err.message)
+        setCooldown(RATE_LIMIT_COOLDOWN_SECONDS)
+      } else {
+        setFormError(err instanceof Error ? err.message : "Unable to log in. Please try again.")
+      }
     }
-  }
-
-  function handleForgotPassword() {
-    toast("Please contact your barangay administrator to reset your password.", { icon: "🔒" })
   }
 
   return (
@@ -296,21 +317,26 @@ export default function LoginPage() {
                     />
                     <button
                       type="button"
-                      onClick={handleForgotPassword}
+                      onClick={() => setForgotPasswordOpen(true)}
                       className="text-sm font-medium text-primary transition-colors hover:text-primary/80 hover:underline"
                     >
                       Forgot password?
                     </button>
                   </div>
 
-                  {formError ? <p className="text-sm font-medium text-destructive">{formError}</p> : null}
+                  {formError ? (
+                    <p className="text-sm font-medium text-destructive">
+                      {formError}
+                      {cooldown > 0 ? ` Try again in ${cooldown}s.` : ""}
+                    </p>
+                  ) : null}
 
                   <Button
                     type="submit"
-                    disabled={form.formState.isSubmitting}
+                    disabled={form.formState.isSubmitting || cooldown > 0}
                     className="h-[54px] w-full rounded-[14px] text-base font-semibold shadow-md transition-all duration-[250ms] hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg"
                   >
-                    Sign In
+                    {cooldown > 0 ? `Try again in ${cooldown}s` : "Sign In"}
                     <ArrowRight className="size-4" />
                   </Button>
                 </form>
@@ -325,6 +351,8 @@ export default function LoginPage() {
           </div>
         </motion.div>
       </div>
+
+      <ForgotPasswordDialog open={forgotPasswordOpen} onOpenChange={setForgotPasswordOpen} />
     </motion.div>
   )
 }

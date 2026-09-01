@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { residentService } from "../services/resident.service";
+import { residentRepository } from "../repositories/resident.repository";
 import { sendSuccess } from "../utils/apiResponse.util";
 import { asyncHandler } from "../utils/asyncHandler.util";
 import { publicUrlFor } from "../config/multer";
@@ -34,6 +35,22 @@ export const assignResidentTags = asyncHandler(async (req: Request<{ id: string 
   const { tags } = req.body as { tags: { tagType: string; remarks?: string; effectiveDate?: string; expiryDate?: string }[] };
   const resident = await residentService.assignTags(req.params.id, tags, req);
   sendSuccess(res, resident);
+});
+
+export const searchPublicResidents = asyncHandler(async (req: Request, res: Response) => {
+  const query = String(req.query.q ?? "").trim();
+  if (query.length < 2) {
+    sendSuccess(res, []);
+    return;
+  }
+  const residents = await residentRepository.searchPublic(query);
+  const results = residents.map((r) => ({
+    id: r.id,
+    fullName: [r.firstName, r.middleName, r.lastName, r.suffix].filter(Boolean).join(" "),
+    purok: r.purok.name,
+    sitio: r.purok.sitio.name,
+  }));
+  sendSuccess(res, results);
 });
 
 export const uploadResidentPhoto = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {

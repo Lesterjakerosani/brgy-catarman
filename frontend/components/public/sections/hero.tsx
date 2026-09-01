@@ -22,7 +22,11 @@ export function Hero() {
   ]
 
   return (
-    <section id="hero" className="relative isolate -mt-[6.25rem] flex min-h-[92vh] items-center overflow-hidden bg-[#081a3a] pt-[6.25rem]">
+    <section
+      id="hero"
+      className="relative isolate -mt-[6.25rem] flex min-h-[92vh] items-center overflow-hidden pt-[6.25rem]"
+      style={{ backgroundColor: "var(--primary)" }}
+    >
       <div className="absolute inset-0">
         {settings.heroBackgroundUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -31,7 +35,13 @@ export function Hero() {
           <BarangayHallIllustration />
         )}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-[#081a3a]/95 via-[#081a3a]/80 to-[#081a3a]" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, color-mix(in srgb, var(--primary) 95%, transparent) 0%, color-mix(in srgb, var(--primary) 80%, transparent) 50%, var(--primary) 100%)",
+        }}
+      />
       <Particles />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">

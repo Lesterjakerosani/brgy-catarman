@@ -13,6 +13,7 @@ import {
   Settings,
   ShieldAlert,
   Tags,
+  TrendingUp,
   Users2,
 } from "lucide-react"
 import type { UserRole } from "@/types"
@@ -32,7 +33,10 @@ export interface NavGroup {
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Overview",
-    items: [{ label: "Dashboard", href: "/dashboard/overview", icon: LayoutDashboard, roles: ["Staff", "Administrator"] }],
+    items: [
+      { label: "Dashboard", href: "/dashboard/overview", icon: LayoutDashboard, roles: ["Staff", "Administrator"] },
+      { label: "Analytics", href: "/dashboard/analytics", icon: TrendingUp, roles: ["Staff", "Administrator"] },
+    ],
   },
   {
     label: "Community Records",

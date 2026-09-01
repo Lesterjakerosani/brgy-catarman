@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import toast from "react-hot-toast"
-import { Camera, Check, Pencil, X } from "lucide-react"
+import { Camera, Check, Pencil, ShieldQuestion, X } from "lucide-react"
 import { PageHeader } from "@/components/shared/page-header"
 import { InitialsAvatar } from "@/components/shared/initials-avatar"
 import { AvatarCropDialog } from "@/components/dashboard/settings/avatar-crop-dialog"
@@ -15,10 +15,12 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useMe, useChangeOwnPassword, useUpdateOwnAvatar, useUpdateOwnProfile } from "@/lib/api/hooks/use-auth"
+import { useMe, useChangeOwnPassword, useUpdateOwnAvatar, useUpdateOwnProfile, useUpdateSecurityQuestions } from "@/lib/api/hooks/use-auth"
 import { dataUrlToFile } from "@/lib/api/adapters/file.adapter"
 import { ApiError } from "@/lib/api/types"
+import { SECURITY_QUESTIONS } from "@/lib/security-questions"
 
 function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -42,11 +44,26 @@ const passwordSchema = z
 
 type PasswordFormValues = z.infer<typeof passwordSchema>
 
+const securityQuestionsSchema = z
+  .object({
+    question1: z.string().min(1, "Please choose a question."),
+    answer1: z.string().min(1, "Please provide an answer."),
+    question2: z.string().min(1, "Please choose a question."),
+    answer2: z.string().min(1, "Please provide an answer."),
+  })
+  .refine((data) => data.question1 !== data.question2, {
+    message: "Please choose two different questions.",
+    path: ["question2"],
+  })
+
+type SecurityQuestionsFormValues = z.infer<typeof securityQuestionsSchema>
+
 export function MyAccountSettings() {
   const { data: session } = useMe()
   const updateAvatar = useUpdateOwnAvatar()
   const updateProfile = useUpdateOwnProfile()
   const changeOwnPassword = useChangeOwnPassword()
+  const updateSecurityQuestions = useUpdateSecurityQuestions()
 
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [cropSrc, setCropSrc] = React.useState<string | null>(null)
@@ -57,6 +74,11 @@ export function MyAccountSettings() {
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
+  })
+
+  const securityForm = useForm<SecurityQuestionsFormValues>({
+    resolver: zodResolver(securityQuestionsSchema),
+    defaultValues: { question1: "", answer1: "", question2: "", answer2: "" },
   })
 
   if (!session) return null
@@ -107,6 +129,16 @@ export function MyAccountSettings() {
       form.reset({ currentPassword: "", newPassword: "", confirmPassword: "" })
     } catch (err) {
       form.setError("currentPassword", { message: err instanceof ApiError ? err.message : "Unable to change password." })
+    }
+  }
+
+  async function onSubmitSecurityQuestions(values: SecurityQuestionsFormValues) {
+    try {
+      await updateSecurityQuestions.mutateAsync(values)
+      toast.success("Security questions updated.")
+      securityForm.reset({ question1: "", answer1: "", question2: "", answer2: "" })
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Unable to update security questions.")
     }
   }
 
@@ -229,6 +261,105 @@ export function MyAccountSettings() {
                 />
               </div>
               <Button type="submit">Update Password</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border/70">
+        <CardContent className="space-y-4 p-6">
+          <div className="flex items-start gap-2">
+            <ShieldQuestion className="mt-0.5 size-4 shrink-0 text-primary" />
+            <div>
+              <p className="text-sm font-semibold text-foreground">Security Questions</p>
+              <p className="text-xs text-muted-foreground">
+                {session.securityQuestionsSet
+                  ? "Update the questions used to recover your account if you ever forget your password."
+                  : "Set these up so you can reset your own password later without needing an administrator."}
+              </p>
+            </div>
+          </div>
+          <Form {...securityForm}>
+            <form onSubmit={securityForm.handleSubmit(onSubmitSecurityQuestions)} className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <FormField
+                  control={securityForm.control}
+                  name="question1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Question 1</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose a question" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {SECURITY_QUESTIONS.map((q) => (
+                            <SelectItem key={q} value={q}>
+                              {q}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={securityForm.control}
+                  name="answer1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Answer 1</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <FormField
+                  control={securityForm.control}
+                  name="question2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Question 2</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose a question" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {SECURITY_QUESTIONS.map((q) => (
+                            <SelectItem key={q} value={q}>
+                              {q}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={securityForm.control}
+                  name="answer2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Answer 2</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button type="submit">{session.securityQuestionsSet ? "Update Security Questions" : "Save Security Questions"}</Button>
             </form>
           </Form>
         </CardContent>

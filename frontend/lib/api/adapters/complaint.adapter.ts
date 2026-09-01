@@ -52,6 +52,7 @@ interface BackendComplaint {
 
 export function toSubmitComplaintPayload(values: {
   reporterName: string
+  residentId: string
   reporterPhone: string
   reporterEmail: string
   reportedPerson?: string
@@ -66,6 +67,7 @@ export function toSubmitComplaintPayload(values: {
 }) {
   return {
     reporterName: values.reporterName,
+    residentId: values.residentId,
     reporterPhone: values.reporterPhone,
     reporterEmail: values.reporterEmail,
     reportedPerson: values.reportedPerson || undefined,

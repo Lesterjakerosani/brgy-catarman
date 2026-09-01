@@ -3,13 +3,11 @@ import type { BackendDocumentType } from "@/lib/api/hooks/use-document-types"
 
 const STATUS_TO_BACKEND: Record<CertificateStatus, string> = {
   Pending: "PENDING",
-  "Under Review": "UNDER_REVIEW",
+  Processing: "PROCESSING",
   Approved: "APPROVED",
   Rejected: "REJECTED",
   "Ready for Claim": "READY_FOR_CLAIM",
   Claimed: "CLAIMED",
-  "Not Claimed": "NOT_CLAIMED",
-  Expired: "EXPIRED",
 }
 const STATUS_FROM_BACKEND: Record<string, CertificateStatus> = Object.fromEntries(
   Object.entries(STATUS_TO_BACKEND).map(([display, backend]) => [backend, display as CertificateStatus]),

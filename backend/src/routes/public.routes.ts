@@ -7,12 +7,13 @@ import * as directoryController from "../controllers/directory.controller";
 import * as settingsController from "../controllers/settings.controller";
 import * as dashboardController from "../controllers/dashboard.controller";
 import * as aiAssistantController from "../controllers/aiAssistant.controller";
-import { publicLimiter, authLimiter, aiAssistantLimiter } from "../middlewares/rateLimiter.middleware";
+import * as residentController from "../controllers/resident.controller";
+import { publicLimiter, publicWriteLimiter, aiAssistantLimiter } from "../middlewares/rateLimiter.middleware";
 import { optionalAuth } from "../middlewares/auth.middleware";
 import { maintenanceGuard } from "../middlewares/maintenanceGuard.middleware";
 import { validateMiddleware } from "../middlewares/validate.middleware";
 import { uploadSingle } from "../middlewares/upload.middleware";
-import { publicCertificateRequestValidator } from "../validators/certificate.validators";
+import { onlineCertificateRequestValidator } from "../validators/certificate.validators";
 import { submitComplaintValidator, addPhotoValidator } from "../validators/complaint.validators";
 import { commentValidator, reactionValidator } from "../validators/announcement.validators";
 import { contactFormValidator } from "../validators/settings.validators";
@@ -24,6 +25,7 @@ router.use(publicLimiter);
 
 router.get("/document-types", documentTypeController.listDocumentTypes);
 router.get("/stats", dashboardController.getPublicDashboardStats);
+router.get("/residents/search", residentController.searchPublicResidents);
 router.post(
   "/ai-assistant/chat",
   aiAssistantLimiter,
@@ -34,9 +36,9 @@ router.post(
 
 router.post(
   "/certificate-requests",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
-  publicCertificateRequestValidator,
+  onlineCertificateRequestValidator,
   validateMiddleware,
   certificateRequestController.submitPublicCertificateRequest,
 );
@@ -48,7 +50,7 @@ router.get(
 // here — no auth, matching the same pattern as public complaint photos.
 router.post(
   "/certificate-requests/:id/requirements",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   uploadSingle("certificates", "file"),
   certificateRequestController.uploadCertificateRequirement,
@@ -56,7 +58,7 @@ router.post(
 
 router.post(
   "/complaints",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   submitComplaintValidator,
   validateMiddleware,
@@ -67,7 +69,7 @@ router.get("/complaints/track/:referenceNumber", complaintController.trackCompla
 // (and any evidence) here — no auth, since residents don't have accounts.
 router.post(
   "/complaints/:id/photos",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   uploadSingle("complaints", "photo"),
   addPhotoValidator,
@@ -87,7 +89,7 @@ router.post(
   // comments go through the separate, requireAuth-guarded dashboard route in
   // announcement.routes.ts.
   "/announcements/:id/comments",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   commentValidator,
   validateMiddleware,
@@ -95,7 +97,7 @@ router.post(
 );
 router.post(
   "/comments/:commentId/replies",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   commentValidator,
   validateMiddleware,
@@ -103,7 +105,7 @@ router.post(
 );
 router.put(
   "/announcements/:id/reaction",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   optionalAuth,
   reactionValidator,
@@ -112,7 +114,7 @@ router.put(
 );
 router.put(
   "/comments/:commentId/reaction",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   optionalAuth,
   reactionValidator,
@@ -126,7 +128,7 @@ router.get("/activities", directoryController.listActivities);
 router.get("/settings", settingsController.getPublicSettings);
 router.post(
   "/contact",
-  authLimiter,
+  publicWriteLimiter,
   maintenanceGuard,
   contactFormValidator,
   validateMiddleware,

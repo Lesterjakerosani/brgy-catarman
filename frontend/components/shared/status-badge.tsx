@@ -23,13 +23,11 @@ const TONE_CLASSES: Record<ToneKey, string> = {
 const STATUS_TONE: Record<string, ToneKey> = {
   // Certificate statuses
   Pending: "neutral",
-  "Under Review": "info",
+  Processing: "info",
   Approved: "success",
   Rejected: "danger",
   "Ready for Claim": "gold",
   Claimed: "success",
-  "Not Claimed": "warning",
-  Expired: "muted",
   // Complaint statuses
   New: "info",
   Validated: "gold",

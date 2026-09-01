@@ -14,6 +14,7 @@ export interface BackendUser {
   contactNumber?: string | null
   mustChangePassword?: boolean
   lastLogin?: string | null
+  securityQuestionsSet?: boolean
 }
 
 export const authApi = {
@@ -22,6 +23,15 @@ export const authApi = {
     apiFetch<BackendUser>("/auth/login", { method: "POST", body }),
   logout: () => apiFetch("/auth/logout", { method: "POST" }),
   logoutAll: () => apiFetch("/auth/logout-all", { method: "POST" }),
+  getForgotPasswordQuestions: (email: string) =>
+    apiFetch<{ question1: string; question2: string }>("/auth/forgot-password/questions", {
+      method: "POST",
+      body: { email },
+    }),
+  resetPassword: (body: { email: string; answer1: string; answer2: string; newPassword: string }) =>
+    apiFetch("/auth/reset-password", { method: "POST", body }),
+  updateSecurityQuestions: (body: { question1: string; answer1: string; question2: string; answer2: string }) =>
+    apiFetch("/auth/me/security-questions", { method: "PATCH", body }),
   changePassword: (body: { currentPassword: string; newPassword: string }) =>
     apiFetch("/auth/change-password", { method: "POST", body }),
   updateProfile: (name: string) => apiFetch<BackendUser>("/auth/me", { method: "PATCH", body: { name } }),
@@ -77,6 +87,12 @@ export const residentsApi = {
     formData.append("photo", file)
     return apiUpload(`/residents/${id}/photo`, formData)
   },
+  // Public/anonymous -- minimal identity-verification lookup used by the
+  // certificate-request and incident-report forms.
+  searchPublic: (query: string) =>
+    apiFetch<{ id: string; fullName: string; purok: string; sitio: string }[]>(
+      `/public/residents/search${buildQueryString({ q: query })}`,
+    ),
 }
 
 // ─────────────────────────── HOUSEHOLDS ───────────────────────────
@@ -280,6 +296,7 @@ export const notificationsApi = {
 export const dashboardApi = {
   stats: () => apiFetch("/dashboard/stats"),
   statsPublic: () => apiFetch("/public/stats"),
+  revenue: () => apiFetch("/dashboard/revenue"),
 }
 
 // ─────────────────────────── AI ASSISTANT ───────────────────────────

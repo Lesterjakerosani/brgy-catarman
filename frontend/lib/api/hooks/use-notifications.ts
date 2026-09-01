@@ -8,11 +8,17 @@ import type { AppNotification } from "@/types"
 
 type NotificationsResult = PaginatedResult<unknown> & { unreadCount: number }
 
+/** New notifications come from other people's actions (a resident submitting
+ * a request, commenting, reacting) -- nothing in this same browser tab would
+ * ever invalidate the cache for those, so this has to poll rather than rely
+ * on mutation-triggered invalidation alone. */
 export function useNotifications(params?: { page?: number; pageSize?: number }) {
   const queryParams = { page: params?.page ?? 1, pageSize: params?.pageSize ?? 50 }
   const { data, isLoading } = useQuery<NotificationsResult>({
     queryKey: [...qk.notifications.all, queryParams],
     queryFn: () => notificationsApi.list(queryParams) as Promise<NotificationsResult>,
+    refetchInterval: 30 * 1000,
+    refetchIntervalInBackground: false,
   })
   const notifications: AppNotification[] = (data?.items ?? []).map((n) => fromNotificationDto(n as never))
   return { notifications, unreadCount: data?.unreadCount ?? 0, isLoading }

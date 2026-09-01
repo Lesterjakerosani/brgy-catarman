@@ -1,5 +1,14 @@
 import { env } from "../config/env";
 import { ApiError } from "./apiError.util";
+import { logger } from "./logger.util";
+
+const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
+const MAX_ATTEMPTS = 3;
+const RETRY_DELAYS_MS = [500, 1500];
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export interface AssistantOfficial {
   name: string;
@@ -140,28 +149,45 @@ export async function askGemini(message: string, history: ChatTurn[], context: A
   ];
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${env.GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
-
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents,
-      systemInstruction: { parts: [{ text: buildSystemInstruction(context) }] },
-      generationConfig: { maxOutputTokens: 700, temperature: 0.4 },
-    }),
+  const requestBody = JSON.stringify({
+    contents,
+    systemInstruction: { parts: [{ text: buildSystemInstruction(context) }] },
+    generationConfig: { maxOutputTokens: 700, temperature: 0.4 },
   });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw ApiError.internal(`AI assistant is temporarily unavailable (Gemini ${res.status}): ${body.slice(0, 300)}`);
+  // Gemini occasionally returns 429/5xx under momentary load ("high demand,
+  // try again later") -- a couple of quick retries with backoff resolve most
+  // of these transparently instead of failing the resident's chat outright.
+  let lastErrorBody = "";
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: requestBody,
+    });
+
+    if (res.ok) {
+      const data = (await res.json()) as {
+        candidates?: { content?: { parts?: { text?: string }[] } }[];
+      };
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) {
+        throw ApiError.internal("The AI assistant didn't return a response. Please try again.");
+      }
+      return text.trim();
+    }
+
+    lastStatus = res.status;
+    lastErrorBody = await res.text();
+
+    const canRetry = RETRYABLE_STATUSES.has(res.status) && attempt < MAX_ATTEMPTS - 1;
+    if (!canRetry) break;
+    await sleep(RETRY_DELAYS_MS[attempt]);
   }
 
-  const data = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[];
-  };
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw ApiError.internal("The AI assistant didn't return a response. Please try again.");
-  }
-  return text.trim();
+  logger.error("Gemini request failed after retries", { status: lastStatus, body: lastErrorBody.slice(0, 500) });
+  throw ApiError.internal(
+    "The AI assistant is experiencing high demand right now. Please try again in a moment, or contact the barangay office directly.",
+  );
 }

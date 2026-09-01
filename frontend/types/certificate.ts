@@ -10,13 +10,11 @@ export type DocumentType =
 
 export type CertificateStatus =
   | "Pending"
-  | "Under Review"
+  | "Processing"
   | "Approved"
   | "Rejected"
   | "Ready for Claim"
   | "Claimed"
-  | "Not Claimed"
-  | "Expired"
 
 export type RequestChannel = "Online" | "Walk-in"
 

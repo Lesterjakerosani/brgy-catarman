@@ -15,13 +15,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { CameraCapture } from "@/components/shared/camera-capture"
 import { MultiCameraCapture } from "@/components/shared/multi-camera-capture"
 import { RecaptchaCheckbox } from "@/components/shared/recaptcha-checkbox"
+import { ResidentPickerField, type ResidentPickerValue } from "@/components/shared/resident-picker-field"
 import { INCIDENT_CATEGORIES } from "@/data/complaints"
 import { useSubmitComplaint } from "@/lib/api/hooks/use-complaints"
 import { ApiError } from "@/lib/api/types"
 
 const incidentSchema = z
   .object({
-    reporterName: z.string().min(2, "Please enter your full name."),
     reporterPhone: z.string().min(7, "Please enter a valid phone number."),
     reporterEmail: z.email("Please enter a valid email address."),
     reportedPerson: z.string().optional(),
@@ -45,6 +45,7 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
   const [reporterPhoto, setReporterPhoto] = React.useState("")
   const [evidence, setEvidence] = React.useState<string[]>([])
   const [verified, setVerified] = React.useState(false)
+  const [selectedResident, setSelectedResident] = React.useState<ResidentPickerValue | null>(null)
   const [formError, setFormError] = React.useState<string | null>(null)
   const [phase, setPhase] = React.useState<"form" | "success">("form")
   const [referenceNumber, setReferenceNumber] = React.useState("")
@@ -52,7 +53,6 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
   const form = useForm<IncidentValues>({
     resolver: zodResolver(incidentSchema),
     defaultValues: {
-      reporterName: "",
       reporterPhone: "",
       reporterEmail: "",
       reportedPerson: "",
@@ -74,12 +74,17 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
       setReporterPhoto("")
       setEvidence([])
       setVerified(false)
+      setSelectedResident(null)
       setFormError(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   async function onSubmit(values: IncidentValues) {
+    if (!selectedResident) {
+      setFormError("Please select your name from the resident list. Only names on record in our household/resident database can submit a report.")
+      return
+    }
     if (!reporterPhoto) {
       setFormError("Please capture a live photo to verify your identity as the reporter.")
       return
@@ -92,7 +97,7 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
 
     try {
       const complaint = await submitComplaint.mutateAsync({
-        values,
+        values: { ...values, reporterName: selectedResident.fullName, residentId: selectedResident.id },
         reporterPhotoDataUrl: reporterPhoto,
         evidenceDataUrls: evidence,
       })
@@ -171,20 +176,15 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
                   <p className="text-sm text-muted-foreground">Kept strictly confidential and visible only to authorized staff.</p>
                 </div>
 
+                <div className="space-y-2">
+                  <FormLabel>Full Name</FormLabel>
+                  <ResidentPickerField value={selectedResident} onChange={setSelectedResident} />
+                  <p className="text-sm text-muted-foreground">
+                    Search and select your name as registered in our household/resident records. Only registered residents can submit a report.
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="reporterName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Juan Dela Cruz" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="reporterPhone"
@@ -198,21 +198,21 @@ export function ReportIncidentDialog({ open, onOpenChange }: { open: boolean; on
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="reporterEmail"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="you@example.com" {...field} />
+                        </FormControl>
+                        <FormDescription>A confirmation of your report will be sent to this email.</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <FormField
-                  control={form.control}
-                  name="reporterEmail"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} />
-                      </FormControl>
-                      <FormDescription>A confirmation of your report will be sent to this email.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <div className="space-y-1 border-t border-border pt-6">
                   <h2 className="font-heading text-base font-bold text-foreground">4. Incident Details</h2>

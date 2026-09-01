@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma";
+import { startOfManilaDay, startOfManilaMonth, startOfManilaYear } from "../utils/manilaTime.util";
 
 async function getStats() {
   const [
@@ -31,7 +32,7 @@ async function getStats() {
     prisma.complaint.groupBy({ by: ["status"], where: { deletedAt: null }, _count: true }),
     prisma.blotter.groupBy({ by: ["status"], where: { deletedAt: null }, _count: true }),
     prisma.certificateRequest.count({
-      where: { deletedAt: null, status: { in: ["PENDING", "UNDER_REVIEW"] } },
+      where: { deletedAt: null, status: { in: ["PENDING", "PROCESSING"] } },
     }),
     prisma.complaint.count({ where: { deletedAt: null, status: { in: ["NEW", "UNDER_REVIEW"] } } }),
     prisma.blotter.count({
@@ -86,4 +87,79 @@ async function getPublicStats() {
   return { residents, households, puroks, certificatesProcessed, incidentsResolved };
 }
 
-export const dashboardService = { getStats, getPublicStats };
+// Revenue is only recognized once a document has actually been claimed
+// (feeAmount is a locked-in price snapshot set at approval time -- see
+// certificateRequest.service.ts). Pending/processing/approved-but-unclaimed/
+// rejected requests never count, per the barangay's revenue policy.
+async function getRevenueAnalytics() {
+  const now = new Date();
+  const todayStart = startOfManilaDay(now);
+  const monthStart = startOfManilaMonth(now);
+  const yearStart = startOfManilaYear(now);
+  const claimedWhere = { deletedAt: null, status: "CLAIMED" as const };
+
+  const [totalsToday, totalsMonth, totalsYear, totalsAll, documentTypes, breakdownToday, breakdownMonth, breakdownYear, breakdownAll] =
+    await Promise.all([
+      prisma.certificateRequest.aggregate({ where: { ...claimedWhere, claimedAt: { gte: todayStart } }, _sum: { feeAmount: true } }),
+      prisma.certificateRequest.aggregate({ where: { ...claimedWhere, claimedAt: { gte: monthStart } }, _sum: { feeAmount: true } }),
+      prisma.certificateRequest.aggregate({ where: { ...claimedWhere, claimedAt: { gte: yearStart } }, _sum: { feeAmount: true } }),
+      prisma.certificateRequest.aggregate({ where: claimedWhere, _sum: { feeAmount: true } }),
+      prisma.documentType.findMany({ where: { deletedAt: null }, select: { id: true, name: true, fee: true } }),
+      prisma.certificateRequest.groupBy({
+        by: ["documentTypeId"],
+        where: { ...claimedWhere, claimedAt: { gte: todayStart } },
+        _sum: { feeAmount: true },
+        _count: true,
+      }),
+      prisma.certificateRequest.groupBy({
+        by: ["documentTypeId"],
+        where: { ...claimedWhere, claimedAt: { gte: monthStart } },
+        _sum: { feeAmount: true },
+        _count: true,
+      }),
+      prisma.certificateRequest.groupBy({
+        by: ["documentTypeId"],
+        where: { ...claimedWhere, claimedAt: { gte: yearStart } },
+        _sum: { feeAmount: true },
+        _count: true,
+      }),
+      prisma.certificateRequest.groupBy({
+        by: ["documentTypeId"],
+        where: claimedWhere,
+        _sum: { feeAmount: true },
+        _count: true,
+      }),
+    ]);
+
+  const documentTypeById = new Map(documentTypes.map((d) => [d.id, d]));
+  const toBreakdown = (rows: typeof breakdownAll) =>
+    rows
+      .map((row) => {
+        const docType = documentTypeById.get(row.documentTypeId);
+        return {
+          documentTypeId: row.documentTypeId,
+          name: docType?.name ?? "Unknown",
+          price: docType?.fee ?? 0,
+          count: row._count,
+          revenue: row._sum.feeAmount ?? 0,
+        };
+      })
+      .sort((a, b) => Number(b.revenue) - Number(a.revenue));
+
+  return {
+    totals: {
+      today: totalsToday._sum.feeAmount ?? 0,
+      month: totalsMonth._sum.feeAmount ?? 0,
+      year: totalsYear._sum.feeAmount ?? 0,
+      allTime: totalsAll._sum.feeAmount ?? 0,
+    },
+    breakdown: {
+      today: toBreakdown(breakdownToday),
+      month: toBreakdown(breakdownMonth),
+      year: toBreakdown(breakdownYear),
+      allTime: toBreakdown(breakdownAll),
+    },
+  };
+}
+
+export const dashboardService = { getStats, getPublicStats, getRevenueAnalytics };

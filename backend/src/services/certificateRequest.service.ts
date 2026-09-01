@@ -5,6 +5,7 @@ import { prisma } from "../config/prisma";
 import { parsePagination, toPaginationResult } from "../utils/pagination.util";
 import { ApiError } from "../utils/apiError.util";
 import { activityLogService } from "./activityLog.service";
+import { notificationRepository } from "../repositories/notification.repository";
 import { sendCertificateStatusEmail, sendCertificateSubmittedEmail } from "../utils/residentEmail.util";
 
 export interface PublicCertificateRequestInput {
@@ -52,8 +53,25 @@ async function trackByReference(referenceNumber: string) {
 }
 
 async function submitPublicRequest(input: PublicCertificateRequestInput, req: Request) {
+  const resident = input.residentId
+    ? await prisma.resident.findFirst({ where: { id: input.residentId, deletedAt: null } })
+    : null;
+  if (!resident) {
+    throw ApiError.badRequest("We couldn't find that resident record. Please select your name from the list.");
+  }
+  const requestorName = [resident.firstName, resident.middleName, resident.lastName, resident.suffix]
+    .filter(Boolean)
+    .join(" ");
+
+  const duplicate = await certificateRequestRepository.findActiveDuplicate(resident.id, input.documentTypeId);
+  if (duplicate) {
+    throw ApiError.conflict(
+      `You already have a request for this document (Reference No. ${duplicate.referenceNumber}) that's still being processed. Please track that request instead of submitting a new one.`,
+    );
+  }
+
   const request = await certificateRequestRepository.create(
-    { ...input, channel: "ONLINE", status: "PENDING" },
+    { ...input, requestorName, channel: "ONLINE", status: "PENDING" },
     "Request submitted online",
   );
 
@@ -62,6 +80,13 @@ async function submitPublicRequest(input: PublicCertificateRequestInput, req: Re
     action: "New online certificate request submitted",
     module: "CERTIFICATES",
     description: request.referenceNumber,
+  });
+
+  await notificationRepository.create({
+    title: "New Document Request",
+    message: `${requestorName} requested a ${request.documentType.name} (Ref: ${request.referenceNumber})`,
+    type: "INFO",
+    link: "/dashboard/certificates",
   });
 
   await sendCertificateSubmittedEmail({
@@ -79,7 +104,7 @@ async function submitWalkInRequest(input: WalkInCertificateRequestInput, req: Re
     {
       ...input,
       channel: "WALK_IN",
-      status: "UNDER_REVIEW",
+      status: "PROCESSING",
       processedById: req.user!.id,
       reviewedAt: new Date(),
     },
@@ -105,7 +130,7 @@ async function submitWalkInRequest(input: WalkInCertificateRequestInput, req: Re
 
 async function updateStatus(
   id: string,
-  status: "PENDING" | "UNDER_REVIEW" | "APPROVED" | "REJECTED" | "READY_FOR_CLAIM" | "CLAIMED" | "NOT_CLAIMED" | "EXPIRED",
+  status: "PENDING" | "PROCESSING" | "APPROVED" | "REJECTED" | "READY_FOR_CLAIM" | "CLAIMED",
   req: Request,
   extra?: { rejectionReason?: string; staffNotes?: string; extendDays?: number; claimedBy?: string },
 ) {
@@ -126,9 +151,9 @@ async function updateStatus(
   }
 
   switch (status) {
-    case "UNDER_REVIEW":
+    case "PROCESSING":
       data.reviewedAt = new Date();
-      timelineLabel = "Request is now under review";
+      timelineLabel = "Request is now being processed";
       break;
     case "APPROVED": {
       data.approvedAt = new Date();
@@ -146,7 +171,16 @@ async function updateStatus(
       timelineLabel = "Document is ready for claim";
       break;
     case "CLAIMED":
-      data.claimedAt = new Date();
+      // Idempotency guard: only stamp claimedAt/feeAmount the FIRST time a
+      // request transitions to Claimed. Re-saving an already-claimed request
+      // must never re-record revenue or shift it into a different day/month/
+      // year bucket -- and the fee is locked in at whatever the document
+      // type's price is right now (at the moment of claiming), so a later
+      // price change in Settings never retroactively affects it.
+      if (!existing.claimedAt) {
+        data.claimedAt = new Date();
+        data.feeAmount = existing.documentType.fee;
+      }
       if (extra?.claimedBy) {
         data.staffNotes = [existing.staffNotes, `Claimed by: ${extra.claimedBy}`].filter(Boolean).join(" | ");
       }
@@ -155,12 +189,6 @@ async function updateStatus(
     case "REJECTED":
       data.rejectionReason = extra?.rejectionReason;
       timelineLabel = "Request rejected";
-      break;
-    case "NOT_CLAIMED":
-      timelineLabel = "Marked as not claimed";
-      break;
-    case "EXPIRED":
-      timelineLabel = "Request expired";
       break;
   }
 

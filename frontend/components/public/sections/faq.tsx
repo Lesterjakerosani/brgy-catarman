@@ -29,7 +29,7 @@ const FAQS = [
   {
     question: "What happens if I don't claim my approved certificate on time?",
     answer:
-      "Approved certificates must be claimed within the given claim deadline (typically 5 days). Unclaimed requests past the deadline will be marked as \"Not Claimed\" or \"Expired\" and may require re-application.",
+      "Approved certificates must be claimed within the given claim deadline (typically 5 days). If you're unable to claim it in time, please contact the barangay office to have the deadline extended.",
   },
 ]
 

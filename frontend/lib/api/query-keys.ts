@@ -81,5 +81,6 @@ export const qk = {
   },
   dashboard: {
     stats: ["dashboard", "stats"] as const,
+    revenue: ["dashboard", "revenue"] as const,
   },
 } as const

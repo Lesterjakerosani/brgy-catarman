@@ -42,6 +42,34 @@ export const logoutAll = asyncHandler(async (req: Request, res: Response) => {
   sendSuccess(res, { loggedOutAll: true });
 });
 
+export const getForgotPasswordQuestions = asyncHandler(async (req: Request, res: Response) => {
+  const { email } = req.body as { email: string };
+  const questions = await authService.getSecurityQuestions({ email });
+  sendSuccess(res, questions);
+});
+
+export const resetPassword = asyncHandler(async (req: Request, res: Response) => {
+  const { email, answer1, answer2, newPassword } = req.body as {
+    email: string;
+    answer1: string;
+    answer2: string;
+    newPassword: string;
+  };
+  await authService.resetPasswordWithSecurityAnswers({ email, answer1, answer2, newPassword, req });
+  sendSuccess(res, { message: "Password reset successfully. You may now log in with your new password." });
+});
+
+export const updateSecurityQuestions = asyncHandler(async (req: Request, res: Response) => {
+  const { question1, answer1, question2, answer2 } = req.body as {
+    question1: string;
+    answer1: string;
+    question2: string;
+    answer2: string;
+  };
+  await authService.setSecurityQuestions({ userId: req.user!.id, question1, answer1, question2, answer2, req });
+  sendSuccess(res, { message: "Security questions updated." });
+});
+
 export const changePassword = asyncHandler(async (req: Request, res: Response) => {
   const { currentPassword, newPassword } = req.body as { currentPassword: string; newPassword: string };
   await authService.changePassword({ userId: req.user!.id, currentPassword, newPassword, req });

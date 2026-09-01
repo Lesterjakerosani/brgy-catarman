@@ -29,6 +29,31 @@ export function useLogin() {
   })
 }
 
+export function useForgotPasswordQuestions() {
+  return useApiMutation<{ question1: string; question2: string }, string>({
+    mutationFn: (email) => authApi.getForgotPasswordQuestions(email),
+    showErrorToast: false,
+  })
+}
+
+export function useResetPassword() {
+  return useApiMutation<unknown, { email: string; answer1: string; answer2: string; newPassword: string }>({
+    mutationFn: (body) => authApi.resetPassword(body),
+    showErrorToast: false,
+  })
+}
+
+export function useUpdateSecurityQuestions() {
+  const queryClient = useQueryClient()
+  return useApiMutation<unknown, { question1: string; answer1: string; question2: string; answer2: string }>({
+    mutationFn: (body) => authApi.updateSecurityQuestions(body),
+    showErrorToast: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: qk.auth.me })
+    },
+  })
+}
+
 export function useLogout() {
   const queryClient = useQueryClient()
   return useApiMutation<unknown, void>({

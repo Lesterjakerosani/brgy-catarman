@@ -41,3 +41,11 @@ export function formatUpdatedLabel(value?: string | Date): string {
 export function formatPhone(value?: string): string {
   return value && value.length > 0 ? value : "—"
 }
+
+const currencyFormatter = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" })
+
+export function formatCurrency(value?: string | number | null): string {
+  const amount = typeof value === "string" ? Number(value) : (value ?? 0)
+  if (!Number.isFinite(amount)) return currencyFormatter.format(0)
+  return currencyFormatter.format(amount)
+}

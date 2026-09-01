@@ -68,13 +68,11 @@ enum PhotoSource {
 
 enum CertificateStatus {
   PENDING
-  UNDER_REVIEW
+  PROCESSING
   APPROVED
   REJECTED
   READY_FOR_CLAIM
   CLAIMED
-  NOT_CLAIMED
-  EXPIRED
 }
 
 enum RequestChannel {
@@ -216,8 +214,10 @@ model User {
   contactNumber          String?
   lastLoginAt            DateTime?
   mustChangePassword     Boolean    @default(false)
-  resetPasswordTokenHash String?
-  resetPasswordExpiresAt DateTime?
+  securityQuestion1      String?
+  securityAnswer1Hash    String?
+  securityQuestion2      String?
+  securityAnswer2Hash    String?
   createdAt              DateTime   @default(now())
   updatedAt              DateTime   @updatedAt
   deletedAt              DateTime?
@@ -340,6 +340,7 @@ model Resident {
 
   headOfHousehold     Household?           @relation("HouseholdHead")
   certificateRequests CertificateRequest[]
+  complaints          Complaint[]
   tags                ResidentTag[]
 
   @@index([lastName, firstName])
@@ -450,6 +451,11 @@ model CertificateRequest {
   residentPhotoUrl       String?
   channel                RequestChannel
   status                 CertificateStatus @default(PENDING)
+  // Snapshot of the document type's fee at the moment this request was
+  // claimed (revenue is only ever recognized on CLAIMED) -- a later price
+  // change in Settings must never retroactively change what past requests
+  // are counted as worth in revenue reports.
+  feeAmount              Decimal?          @db.Decimal(10, 2)
   staffNotes             String?
   rejectionReason        String?
   processedById          String?           @db.Uuid
@@ -508,6 +514,8 @@ model Complaint {
   reporterName       String
   reporterPhone      String
   reporterEmail      String
+  residentId         String?          @db.Uuid
+  resident           Resident?        @relation(fields: [residentId], references: [id])
   reportedPerson     String?
   location           String
   latitude           Decimal?         @db.Decimal(10, 7)

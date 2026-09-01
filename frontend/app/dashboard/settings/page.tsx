@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
-import { Building, Mail, Palette, Pencil, Phone, Plus, Trash2, Users2, Wrench } from "lucide-react"
+import { Banknote, Building, Mail, Palette, Pencil, Phone, Plus, Trash2, Users2, Wrench } from "lucide-react"
 import { PageHeader } from "@/components/shared/page-header"
 import { InitialsAvatar } from "@/components/shared/initials-avatar"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileDropzone } from "@/components/shared/file-dropzone"
 import { OfficialFormDialog } from "@/components/dashboard/settings/official-form-dialog"
 import { MyAccountSettings } from "@/components/dashboard/settings/my-account-settings"
+import { CertificatePricingForm } from "@/components/dashboard/settings/certificate-pricing-form"
 import { useSettings, useUpdateSettings, useUploadSettingsImage } from "@/lib/api/hooks/use-settings"
 import { useOfficials, useDeleteOfficial } from "@/lib/api/hooks/use-officials"
 import { useMe } from "@/lib/api/hooks/use-auth"
@@ -154,6 +155,10 @@ function SystemSettingsPage() {
           <TabsTrigger value="theme">
             <Palette className="size-4" />
             Theme & Branding
+          </TabsTrigger>
+          <TabsTrigger value="pricing">
+            <Banknote className="size-4" />
+            Certificate Pricing
           </TabsTrigger>
           <TabsTrigger value="maintenance">
             <Wrench className="size-4" />
@@ -385,6 +390,14 @@ function SystemSettingsPage() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="pricing">
+          <Card className="border-border/70">
+            <CardContent className="p-6">
+              <CertificatePricingForm />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="maintenance">
           <Card className="border-border/70">
             <CardContent className="p-6">
@@ -419,14 +432,14 @@ function ThemeColorForm({ settings, onSave }: { settings: SystemSettings; onSave
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <Label>Primary Color (Navy)</Label>
+          <Label>Primary Color</Label>
           <div className="mt-1.5 flex items-center gap-2">
             <input type="color" value={primary} onChange={(e) => setPrimary(e.target.value)} className="size-9 cursor-pointer rounded border border-input" />
             <Input value={primary} onChange={(e) => setPrimary(e.target.value)} />
           </div>
         </div>
         <div>
-          <Label>Accent Color (Gold)</Label>
+          <Label>Accent Color</Label>
           <div className="mt-1.5 flex items-center gap-2">
             <input type="color" value={accent} onChange={(e) => setAccent(e.target.value)} className="size-9 cursor-pointer rounded border border-input" />
             <Input value={accent} onChange={(e) => setAccent(e.target.value)} />

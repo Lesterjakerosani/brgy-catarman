@@ -10,3 +10,7 @@ export const getDashboardStats = asyncHandler(async (_req: Request, res: Respons
 export const getPublicDashboardStats = asyncHandler(async (_req: Request, res: Response) => {
   sendSuccess(res, await dashboardService.getPublicStats());
 });
+
+export const getRevenueAnalytics = asyncHandler(async (_req: Request, res: Response) => {
+  sendSuccess(res, await dashboardService.getRevenueAnalytics());
+});

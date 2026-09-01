@@ -152,7 +152,7 @@ export function DashboardSidebar({ role, onNavigate }: { role: UserRole; onNavig
       <div className="relative z-10 border-t border-white/10 p-3">
         <button
           onClick={() => setSignOutOpen(true)}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-300 transition-all duration-200 hover:bg-white/10 hover:text-red-200"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-white/10 hover:text-red-300"
         >
           <LogOut className="size-4 shrink-0" />
           Sign-out

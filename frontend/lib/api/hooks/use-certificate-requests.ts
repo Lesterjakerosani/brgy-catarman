@@ -45,6 +45,7 @@ export function useSubmitPublicCertificateRequest() {
         contactNumber: string
         email: string
         purpose: string
+        residentId: string
       }
       requirements: UploadedFile[]
       documentTypes: BackendDocumentType[]
@@ -122,6 +123,11 @@ export function useUpdateCertificateStatus() {
     onSuccess: (request) => {
       queryClient.invalidateQueries({ queryKey: qk.certificateRequests.all })
       queryClient.setQueryData(qk.certificateRequests.detail(request.id), request)
+      // Marking a request Claimed is what records revenue -- keep the
+      // Analytics dashboard's totals/breakdown in sync without a manual reload.
+      if (request.status === "Claimed") {
+        queryClient.invalidateQueries({ queryKey: qk.dashboard.revenue })
+      }
     },
     successMessage: "Request status updated.",
   })

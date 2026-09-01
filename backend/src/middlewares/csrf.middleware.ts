@@ -9,7 +9,7 @@ const MUTATING_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 const EXEMPT_PATHS = new Set([
   "/api/auth/login",
   "/api/auth/refresh",
-  "/api/auth/forgot-password",
+  "/api/auth/forgot-password/questions",
   "/api/auth/reset-password",
 ]);
 

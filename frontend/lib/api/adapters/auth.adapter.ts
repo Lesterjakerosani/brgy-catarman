@@ -19,6 +19,7 @@ export function toAuthSession(user: BackendUser): AuthSession {
     role: ROLE_FROM_BACKEND[user.role],
     avatarUrl: user.avatarUrl ?? undefined,
     position: user.position,
+    securityQuestionsSet: user.securityQuestionsSet ?? false,
   }
 }
 

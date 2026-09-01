@@ -14,7 +14,6 @@ import {
   Printer,
   Trash2,
   UserRoundCheck,
-  UserRoundX,
   XCircle,
 } from "lucide-react"
 import { PageHeader } from "@/components/shared/page-header"
@@ -35,13 +34,11 @@ import type { CertificateRequest, CertificateStatus } from "@/types"
 const STATUS_FILTERS: (CertificateStatus | "all")[] = [
   "all",
   "Pending",
-  "Under Review",
+  "Processing",
   "Approved",
   "Rejected",
   "Ready for Claim",
   "Claimed",
-  "Not Claimed",
-  "Expired",
 ]
 
 export default function CertificatesPage() {
@@ -113,7 +110,7 @@ export default function CertificatesPage() {
           if (request.status === "Pending") {
             actions.push({ label: "Start Review", icon: FileClock, onClick: () => setActionState({ action: "review", request }) })
           }
-          if (request.status === "Pending" || request.status === "Under Review") {
+          if (request.status === "Pending" || request.status === "Processing") {
             actions.push({ label: "Approve", icon: Check, onClick: () => setActionState({ action: "approve", request }) })
             actions.push({ label: "Reject", icon: XCircle, destructive: true, onClick: () => setActionState({ action: "reject", request }) })
           }
@@ -122,7 +119,6 @@ export default function CertificatesPage() {
           }
           if (request.status === "Ready for Claim") {
             actions.push({ label: "Mark Claimed", icon: UserRoundCheck, onClick: () => setActionState({ action: "claimed", request }) })
-            actions.push({ label: "Mark Not Claimed", icon: UserRoundX, onClick: () => setActionState({ action: "notClaimed", request }) })
             actions.push({ label: "Extend Deadline", icon: CalendarPlus, onClick: () => setActionState({ action: "extend", request }) })
           }
           actions.push({

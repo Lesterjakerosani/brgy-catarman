@@ -9,15 +9,14 @@ import { Label } from "@/components/ui/label"
 import { useUpdateCertificateStatus } from "@/lib/api/hooks/use-certificate-requests"
 import type { CertificateRequest, CertificateStatus } from "@/types"
 
-export type CertificateActionType = "review" | "approve" | "reject" | "ready" | "claimed" | "notClaimed" | "extend"
+export type CertificateActionType = "review" | "approve" | "reject" | "ready" | "claimed" | "extend"
 
 const ACTION_META: Record<CertificateActionType, { title: string; description: string; status?: CertificateStatus; confirmLabel: string; destructive?: boolean }> = {
-  review: { title: "Move to Under Review", description: "Mark this request as currently under review by staff.", status: "Under Review", confirmLabel: "Confirm" },
+  review: { title: "Move to Processing", description: "Mark this request as currently being processed by staff.", status: "Processing", confirmLabel: "Confirm" },
   approve: { title: "Approve Request", description: "Approve this certificate request and generate a control number and claim deadline.", status: "Approved", confirmLabel: "Approve" },
   reject: { title: "Reject Request", description: "Please provide a reason for rejecting this request.", status: "Rejected", confirmLabel: "Reject Request", destructive: true },
   ready: { title: "Mark Ready for Claim", description: "Notify the requestor that their document is ready for pickup.", status: "Ready for Claim", confirmLabel: "Confirm" },
   claimed: { title: "Mark as Claimed", description: "Confirm that the requestor has claimed this document.", status: "Claimed", confirmLabel: "Confirm" },
-  notClaimed: { title: "Mark as Not Claimed", description: "Mark this request as not claimed within the given period.", status: "Not Claimed", confirmLabel: "Confirm", destructive: true },
   extend: { title: "Extend Claim Deadline", description: "Extend the claim deadline for this request.", confirmLabel: "Extend Deadline" },
 }
 

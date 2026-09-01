@@ -38,11 +38,11 @@ export function MissionVisionGoals() {
     <section id="mission-vision" className="bg-[#F8FAFC] py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#D4AF37]">Our Foundation</p>
-          <h2 className="mt-3 font-heading text-3xl font-bold text-[#0B1F3A] sm:text-4xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-gold">Our Foundation</p>
+          <h2 className="mt-3 font-heading text-3xl font-bold text-primary sm:text-4xl">
             Mission, Vision, Goals &amp; Objectives
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-[#4B5563]">
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
             Discover the guiding principles that shape the leadership, public service, and long-term development of
             Barangay Catarman.
           </p>
@@ -56,22 +56,22 @@ export function MissionVisionGoals() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group flex h-full flex-col items-start rounded-2xl border border-[#E5E7EB] bg-white p-8 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/50 hover:shadow-lg"
+              className="group flex h-full flex-col items-start rounded-2xl border border-border bg-white p-8 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
             >
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-[#0B1F3A] transition-colors duration-300 group-hover:bg-[#D4AF37]/15">
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-primary transition-colors duration-300 group-hover:bg-gold/15">
                 <card.icon className="size-6" strokeWidth={1.75} />
               </span>
 
-              <h3 className="mt-5 text-xl font-bold text-[#0B1F3A]">{card.title}</h3>
+              <h3 className="mt-5 text-xl font-bold text-primary">{card.title}</h3>
 
               {"body" in card ? (
-                <p className="mt-3 text-sm leading-relaxed text-[#4B5563]">{card.body}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{card.body}</p>
               ) : (
                 <ul className="mt-3 space-y-2">
                   {card.items.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-[#D4AF37]" />
-                      <span className="text-sm leading-relaxed text-[#4B5563]">{item}</span>
+                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-gold" />
+                      <span className="text-sm leading-relaxed text-muted-foreground">{item}</span>
                     </li>
                   ))}
                 </ul>

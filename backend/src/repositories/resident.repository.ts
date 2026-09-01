@@ -54,6 +54,33 @@ export const residentRepository = {
     return prisma.resident.findFirst({ where: { id, deletedAt: null }, include: includeRelations });
   },
 
+  /** Minimal, privacy-conscious lookup for public identity-verification pickers
+   * (certificate requests, incident reports) -- exposes only what's needed to
+   * disambiguate a name in a list, never contact/photo/birthdate/etc. */
+  searchPublic(query: string) {
+    return prisma.resident.findMany({
+      where: {
+        deletedAt: null,
+        isActive: true,
+        OR: [
+          { firstName: { contains: query, mode: "insensitive" } },
+          { middleName: { contains: query, mode: "insensitive" } },
+          { lastName: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        suffix: true,
+        purok: { select: { name: true, sitio: { select: { name: true } } } },
+      },
+      orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
+      take: 10,
+    });
+  },
+
   create(data: Prisma.ResidentUncheckedCreateInput) {
     return prisma.resident.create({ data, include: includeRelations });
   },

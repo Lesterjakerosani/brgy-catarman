@@ -81,7 +81,7 @@ export function CommentRow({ comment, viewerKey, viewerName, isStaffContext = fa
 
   return (
     <div className="flex items-start gap-2">
-      <InitialsAvatar name={comment.authorName} size="sm" />
+      <InitialsAvatar name={comment.authorName} photoUrl={comment.authorAvatarUrl} size="sm" />
       <div className="min-w-0 flex-1">
         <div className="inline-block rounded-2xl bg-secondary px-3 py-2">
           <p className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
@@ -157,7 +157,7 @@ export function CommentRow({ comment, viewerKey, viewerName, isStaffContext = fa
                     : r.viewerKey !== undefined && r.viewerKey === viewerKey
                   return (
                     <div key={r.id} className="flex items-start gap-2">
-                      <InitialsAvatar name={r.name} size="sm" />
+                      <InitialsAvatar name={r.name} photoUrl={r.avatarUrl} size="sm" />
                       <div className="inline-block rounded-2xl bg-secondary px-3 py-2">
                         <p className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
                           {r.name}

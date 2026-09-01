@@ -146,7 +146,14 @@ export function DashboardTopbar({ role }: { role: UserRole }) {
             ) : (
               <div className="max-h-80 space-y-1 overflow-y-auto">
                 {notifications.slice(0, 8).map((n) => (
-                  <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 whitespace-normal" onClick={() => markReadMutation.mutate(n.id)}>
+                  <DropdownMenuItem
+                    key={n.id}
+                    className="flex flex-col items-start gap-0.5 whitespace-normal"
+                    onClick={() => {
+                      markReadMutation.mutate(n.id)
+                      if (n.link) router.push(n.link)
+                    }}
+                  >
                     <span className="flex w-full items-center justify-between gap-2">
                       <span className="text-sm font-medium text-foreground">{n.title}</span>
                       {!n.isRead ? <span className="size-1.5 shrink-0 rounded-full bg-primary" /> : null}

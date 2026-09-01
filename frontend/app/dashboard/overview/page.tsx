@@ -30,9 +30,9 @@ export default function OverviewPage() {
   const { staffMembers } = useStaff()
   const { total: activityLogCount } = useActivityLogs({ pageSize: 1 })
 
-  const pendingCertificates = certificateRequests.filter((c) => c.status === "Pending" || c.status === "Under Review").length
+  const pendingCertificates = certificateRequests.filter((c) => c.status === "Pending" || c.status === "Processing").length
   const pendingComplaints = complaints.filter((c) => c.status === "New" || c.status === "Under Review").length
-  const todayPendingCertificates = certificateRequests.filter((c) => (c.status === "Pending" || c.status === "Under Review") && isToday(new Date(c.submittedAt))).length
+  const todayPendingCertificates = certificateRequests.filter((c) => (c.status === "Pending" || c.status === "Processing") && isToday(new Date(c.submittedAt))).length
   const todayPendingComplaints = complaints.filter((c) => (c.status === "New" || c.status === "Under Review") && isToday(new Date(c.submittedAt))).length
 
   const statCards = [
