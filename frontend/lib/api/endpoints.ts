@@ -15,6 +15,8 @@ export interface BackendUser {
   mustChangePassword?: boolean
   lastLogin?: string | null
   securityQuestionsSet?: boolean
+  securityQuestion1?: string
+  securityQuestion2?: string
 }
 
 export const authApi = {

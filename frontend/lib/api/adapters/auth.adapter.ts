@@ -20,6 +20,8 @@ export function toAuthSession(user: BackendUser): AuthSession {
     avatarUrl: user.avatarUrl ?? undefined,
     position: user.position,
     securityQuestionsSet: user.securityQuestionsSet ?? false,
+    securityQuestion1: user.securityQuestion1,
+    securityQuestion2: user.securityQuestion2,
   }
 }
 

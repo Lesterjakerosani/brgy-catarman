@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -21,6 +22,7 @@ import { useMe, useChangeOwnPassword, useUpdateOwnAvatar, useUpdateOwnProfile, u
 import { dataUrlToFile } from "@/lib/api/adapters/file.adapter"
 import { ApiError } from "@/lib/api/types"
 import { SECURITY_QUESTIONS } from "@/lib/security-questions"
+import { qk } from "@/lib/api/query-keys"
 
 function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -59,11 +61,20 @@ const securityQuestionsSchema = z
 type SecurityQuestionsFormValues = z.infer<typeof securityQuestionsSchema>
 
 export function MyAccountSettings() {
+  const queryClient = useQueryClient()
   const { data: session } = useMe()
   const updateAvatar = useUpdateOwnAvatar()
   const updateProfile = useUpdateOwnProfile()
   const changeOwnPassword = useChangeOwnPassword()
   const updateSecurityQuestions = useUpdateSecurityQuestions()
+
+  // This page is the only place session data (avatar, security questions)
+  // gets edited, so always show the true current state here instead of
+  // whatever was cached from an earlier visit or a stale session.
+  React.useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: qk.auth.me })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [cropSrc, setCropSrc] = React.useState<string | null>(null)
@@ -80,6 +91,21 @@ export function MyAccountSettings() {
     resolver: zodResolver(securityQuestionsSchema),
     defaultValues: { question1: "", answer1: "", question2: "", answer2: "" },
   })
+
+  // Pre-fill which questions are already set (never the answers -- those are
+  // hashed and write-only, so re-entering them is required to change either
+  // question, same as changing a password).
+  React.useEffect(() => {
+    if (session?.securityQuestion1 || session?.securityQuestion2) {
+      securityForm.reset({
+        question1: session.securityQuestion1 ?? "",
+        answer1: "",
+        question2: session.securityQuestion2 ?? "",
+        answer2: "",
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.securityQuestion1, session?.securityQuestion2])
 
   if (!session) return null
 
@@ -274,7 +300,7 @@ export function MyAccountSettings() {
               <p className="text-sm font-semibold text-foreground">Security Questions</p>
               <p className="text-xs text-muted-foreground">
                 {session.securityQuestionsSet
-                  ? "Update the questions used to recover your account if you ever forget your password."
+                  ? "Your questions are shown below. Answers are never displayed for security -- re-enter both answers to save any change, even if you're only updating one question."
                   : "Set these up so you can reset your own password later without needing an administrator."}
               </p>
             </div>

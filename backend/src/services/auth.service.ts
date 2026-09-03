@@ -37,6 +37,8 @@ function toPublicUser(user: {
     position: user.position,
     avatarUrl: user.avatarUrl,
     securityQuestionsSet: Boolean(user.securityQuestion1 && user.securityQuestion2),
+    securityQuestion1: user.securityQuestion1 ?? undefined,
+    securityQuestion2: user.securityQuestion2 ?? undefined,
     status: user.status,
     contactNumber: user.contactNumber,
     mustChangePassword: user.mustChangePassword,

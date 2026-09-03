@@ -4,11 +4,12 @@ import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Check, ClipboardCheck, Copy, Mail } from "lucide-react"
+import { Check, ChevronDown, ClipboardCheck, Copy, Mail } from "lucide-react"
 import toast from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { FileDropzone } from "@/components/shared/file-dropzone"
@@ -19,11 +20,11 @@ import { useSubmitPublicCertificateRequest } from "@/lib/api/hooks/use-certifica
 import { usePublicDocumentTypes } from "@/lib/api/hooks/use-document-types"
 import { ApiError } from "@/lib/api/types"
 import { usePublicDialogStore } from "@/lib/stores/public-dialog-store"
-import type { UploadedFile } from "@/types"
+import type { DocumentType, UploadedFile } from "@/types"
 
 const requestSchema = z
   .object({
-    documentType: z.enum(DOCUMENT_TYPES),
+    documentTypes: z.array(z.enum(DOCUMENT_TYPES)).min(1, "Please select at least one document."),
     otherDocumentLabel: z.string().optional(),
     address: z.string().min(5, "Please enter your complete address."),
     contactNumber: z.string().min(7, "Please enter a valid contact number."),
@@ -31,7 +32,7 @@ const requestSchema = z
     purpose: z.string().min(5, "Please describe the purpose of your request."),
   })
   .superRefine((data, ctx) => {
-    if (data.documentType === "Other Barangay Document" && !data.otherDocumentLabel?.trim()) {
+    if (data.documentTypes.includes("Other Barangay Document") && !data.otherDocumentLabel?.trim()) {
       ctx.addIssue({ code: "custom", path: ["otherDocumentLabel"], message: "Please specify the document you need." })
     }
   })
@@ -51,11 +52,12 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
   const [requirementsError, setRequirementsError] = React.useState<string | null>(null)
   const [phase, setPhase] = React.useState<"form" | "success">("form")
   const [referenceNumber, setReferenceNumber] = React.useState("")
+  const [submittedDocumentTypes, setSubmittedDocumentTypes] = React.useState<DocumentType[]>([])
 
   const form = useForm<RequestValues>({
     resolver: zodResolver(requestSchema),
     defaultValues: {
-      documentType: "Barangay Certificate",
+      documentTypes: ["Barangay Certificate"],
       otherDocumentLabel: "",
       address: "",
       contactNumber: "",
@@ -64,7 +66,8 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
     },
   })
 
-  const documentType = form.watch("documentType")
+  const selectedDocumentTypes = form.watch("documentTypes")
+  const includesOther = selectedDocumentTypes.includes("Other Barangay Document")
 
   React.useEffect(() => {
     if (open) {
@@ -98,12 +101,13 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
 
     const requirements = [...validId, ...purokCert, ...sanitaryCard, ...otherDocs]
     try {
-      const request = await submitPublicRequest.mutateAsync({
-        values: { ...values, requestorName: selectedResident.fullName, residentId: selectedResident.id },
+      const batch = await submitPublicRequest.mutateAsync({
+        values: { ...values, residentId: selectedResident.id },
         requirements,
         documentTypes,
       })
-      setReferenceNumber(request.referenceNumber)
+      setReferenceNumber(batch.referenceNumber)
+      setSubmittedDocumentTypes(values.documentTypes)
       setPhase("success")
     } catch (err) {
       setRequirementsError(err instanceof ApiError ? err.message : "Unable to submit your request. Please try again.")
@@ -131,9 +135,23 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
               </div>
               <DialogTitle className="text-center">Request Submitted Successfully</DialogTitle>
               <DialogDescription className="text-center">
-                Please save your reference number. You will need it to track your request status.
+                Please save your reference number. You will need it to track {submittedDocumentTypes.length > 1 ? "all of these requests" : "your request status"}.
               </DialogDescription>
             </DialogHeader>
+
+            {submittedDocumentTypes.length > 1 ? (
+              <div className="rounded-lg border border-border bg-muted/40 px-4 py-3">
+                <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Documents Requested</p>
+                <ul className="space-y-1 text-sm text-foreground">
+                  {submittedDocumentTypes.map((type) => (
+                    <li key={type} className="flex items-center gap-2">
+                      <Check className="size-3.5 shrink-0 text-emerald-600" />
+                      {type}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             <div className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 px-4 py-3">
               <span className="font-heading text-lg font-bold tracking-wide text-primary">{referenceNumber}</span>
@@ -174,60 +192,52 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <FormField
                     control={form.control}
-                    name="documentType"
+                    name="documentTypes"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Document Type</FormLabel>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {DOCUMENT_TYPES.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Document Type(s)</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button type="button" variant="outline" className="w-full justify-between font-normal">
+                                <span className="truncate text-left">
+                                  {field.value.length === 0
+                                    ? "Select document type(s)"
+                                    : field.value.length === 1
+                                      ? field.value[0]
+                                      : `${field.value.length} documents selected`}
+                                </span>
+                                <ChevronDown className="size-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent align="start" className="w-[var(--radix-popper-anchor-width)] min-w-72 p-1">
+                            {DOCUMENT_TYPES.map((type) => {
+                              const checked = field.value.includes(type)
+                              return (
+                                <label
+                                  key={type}
+                                  className="flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors hover:bg-accent"
+                                >
+                                  <Checkbox
+                                    checked={checked}
+                                    onCheckedChange={(next) => {
+                                      const value: DocumentType[] = next
+                                        ? [...field.value, type]
+                                        : field.value.filter((v) => v !== type)
+                                      field.onChange(value)
+                                    }}
+                                  />
+                                  {type}
+                                </label>
+                              )
+                            })}
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  {documentType === "Other Barangay Document" ? (
-                    <FormField
-                      control={form.control}
-                      name="otherDocumentLabel"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Specify Document</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. Certificate of Good Moral Character" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ) : (
-                    <FormField
-                      control={form.control}
-                      name="purpose"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Purpose</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. Employment requirement" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                </div>
-
-                {documentType === "Other Barangay Document" ? (
                   <FormField
                     control={form.control}
                     name="purpose"
@@ -236,6 +246,22 @@ export function RequestDocumentDialog({ open, onOpenChange }: { open: boolean; o
                         <FormLabel>Purpose</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g. Employment requirement" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {includesOther ? (
+                  <FormField
+                    control={form.control}
+                    name="otherDocumentLabel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Specify Document</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g. Certificate of Good Moral Character" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

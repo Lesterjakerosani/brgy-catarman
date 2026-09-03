@@ -1,4 +1,4 @@
-import type { CertificateRequest, CertificateStatus, DocumentType } from "@/types"
+import type { CertificateRequest, CertificateRequestTrackResult, CertificateStatus, DocumentType } from "@/types"
 import type { BackendDocumentType } from "@/lib/api/hooks/use-document-types"
 
 const STATUS_TO_BACKEND: Record<CertificateStatus, string> = {
@@ -40,10 +40,42 @@ interface BackendCertificateRequest {
   claimedAt?: string | null
   requirements: { id: string; name: string; url: string; sizeKb: number; mimeType: string; uploadedAt: string }[]
   timeline: { id: string; label: string; description?: string | null; actor?: string | null; timestamp: string }[]
+  batch?: { referenceNumber: string } | null
+}
+
+interface BackendCertificateRequestBatch {
+  referenceNumber: string
+  requestorName: string
+  submittedAt: string
+  requests: BackendCertificateRequest[]
 }
 
 export function documentTypeIdByRequestName(name: DocumentType, documentTypes: BackendDocumentType[]): string | undefined {
   return documentTypes.find((d) => d.name === name)?.id
+}
+
+/** Public multi-select submission -- one form fills out shared info once and
+ * requests any number of document types together under one batch. */
+export function toPublicBatchRequestPayload(values: {
+  documentTypes: DocumentType[]
+  otherDocumentLabel?: string
+  address: string
+  contactNumber: string
+  email: string
+  purpose: string
+  residentId: string
+}, documentTypes: BackendDocumentType[]) {
+  return {
+    documentTypeIds: values.documentTypes
+      .map((name) => documentTypeIdByRequestName(name, documentTypes))
+      .filter((id): id is string => Boolean(id)),
+    otherDocumentLabel: values.otherDocumentLabel || undefined,
+    address: values.address,
+    contactNumber: values.contactNumber,
+    email: values.email,
+    purpose: values.purpose,
+    residentId: values.residentId,
+  }
 }
 
 export function toPublicRequestPayload(values: {
@@ -93,6 +125,7 @@ export function fromCertificateRequestDto(dto: BackendCertificateRequest): Certi
   return {
     id: dto.id,
     referenceNumber: dto.referenceNumber,
+    batchReferenceNumber: dto.batch?.referenceNumber ?? undefined,
     controlNumber: dto.controlNumber ?? undefined,
     documentType: (dto.documentType?.name ?? "Other Barangay Document") as DocumentType,
     otherDocumentLabel: dto.otherDocumentLabel ?? undefined,
@@ -119,6 +152,15 @@ export function fromCertificateRequestDto(dto: BackendCertificateRequest): Certi
       ? { id: `${dto.id}-auth-letter`, name: "Authorization Letter", url: dto.authorizationLetterUrl, sizeKb: 0, mimeType: "image/*", uploadedAt: dto.submittedAt }
       : undefined,
     representativeIdUrl: dto.representativeIdUrl ?? undefined,
+  }
+}
+
+export function fromCertificateRequestBatchDto(dto: BackendCertificateRequestBatch): CertificateRequestTrackResult {
+  return {
+    referenceNumber: dto.referenceNumber,
+    requestorName: dto.requestorName,
+    submittedAt: dto.submittedAt,
+    requests: dto.requests.map(fromCertificateRequestDto),
   }
 }
 

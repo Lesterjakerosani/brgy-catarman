@@ -3,15 +3,16 @@ import { certificateRequestsApi } from "@/lib/api/endpoints"
 import { qk } from "@/lib/api/query-keys"
 import { useApiMutation } from "@/lib/api/mutation-helpers"
 import {
-  toPublicRequestPayload,
+  toPublicBatchRequestPayload,
   toWalkInRequestPayload,
   fromCertificateRequestDto,
+  fromCertificateRequestBatchDto,
   certificateStatusToBackend,
 } from "@/lib/api/adapters/certificateRequest.adapter"
 import { dataUrlToFile } from "@/lib/api/adapters/file.adapter"
 import type { BackendDocumentType } from "@/lib/api/hooks/use-document-types"
 import type { PaginatedResult } from "@/lib/api/types"
-import type { CertificateRequest, CertificateStatus, DocumentType, UploadedFile } from "@/types"
+import type { CertificateRequest, CertificateRequestTrackResult, CertificateStatus, DocumentType, UploadedFile } from "@/types"
 
 export function useCertificateRequests(params?: { page?: number; pageSize?: number; search?: string; status?: string }) {
   const queryParams = { page: params?.page ?? 1, pageSize: params?.pageSize ?? 20, search: params?.search, status: params?.status }
@@ -35,12 +36,11 @@ export function useAllCertificateRequests() {
 
 export function useSubmitPublicCertificateRequest() {
   return useApiMutation<
-    CertificateRequest,
+    CertificateRequestTrackResult,
     {
       values: {
-        documentType: DocumentType
+        documentTypes: DocumentType[]
         otherDocumentLabel?: string
-        requestorName: string
         address: string
         contactNumber: string
         email: string
@@ -52,11 +52,17 @@ export function useSubmitPublicCertificateRequest() {
     }
   >({
     mutationFn: async ({ values, requirements, documentTypes }) => {
-      const created = fromCertificateRequestDto((await certificateRequestsApi.submitPublic(toPublicRequestPayload(values, documentTypes))) as never)
-      for (const file of requirements) {
-        await certificateRequestsApi.uploadRequirementPublic(created.id, dataUrlToFile(file.url, file.name), file.name)
+      const batch = fromCertificateRequestBatchDto(
+        (await certificateRequestsApi.submitPublic(toPublicBatchRequestPayload(values, documentTypes))) as never,
+      )
+      // Requirement files apply to every requested document in the batch --
+      // each is its own CertificateRequest staff review independently.
+      for (const request of batch.requests) {
+        for (const file of requirements) {
+          await certificateRequestsApi.uploadRequirementPublic(request.id, dataUrlToFile(file.url, file.name), file.name)
+        }
       }
-      return created
+      return batch
     },
     showErrorToast: false,
   })
@@ -148,5 +154,5 @@ export function useTrackCertificateRequest(referenceNumber: string | undefined) 
     enabled: Boolean(referenceNumber),
     retry: false,
   })
-  return { request: data ? fromCertificateRequestDto(data as never) : undefined, isLoading, isError }
+  return { result: data ? fromCertificateRequestBatchDto(data as never) : undefined, isLoading, isError }
 }

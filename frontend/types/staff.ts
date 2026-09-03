@@ -35,4 +35,6 @@ export interface AuthSession {
   avatarUrl?: string
   position: string
   securityQuestionsSet: boolean
+  securityQuestion1?: string
+  securityQuestion2?: string
 }

@@ -18,6 +18,7 @@ const includeRelations = {
   processedBy: { select: SAFE_USER_SELECT },
   requirements: true,
   timeline: { orderBy: { timestamp: "asc" } },
+  batch: { select: { referenceNumber: true } },
 } satisfies Prisma.CertificateRequestInclude;
 
 function buildWhere(filters: CertificateRequestListFilters): Prisma.CertificateRequestWhereInput {

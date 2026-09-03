@@ -13,7 +13,7 @@ import { optionalAuth } from "../middlewares/auth.middleware";
 import { maintenanceGuard } from "../middlewares/maintenanceGuard.middleware";
 import { validateMiddleware } from "../middlewares/validate.middleware";
 import { uploadSingle } from "../middlewares/upload.middleware";
-import { onlineCertificateRequestValidator } from "../validators/certificate.validators";
+import { publicCertificateBatchRequestValidator } from "../validators/certificate.validators";
 import { submitComplaintValidator, addPhotoValidator } from "../validators/complaint.validators";
 import { commentValidator, reactionValidator } from "../validators/announcement.validators";
 import { contactFormValidator } from "../validators/settings.validators";
@@ -38,7 +38,7 @@ router.post(
   "/certificate-requests",
   publicWriteLimiter,
   maintenanceGuard,
-  onlineCertificateRequestValidator,
+  publicCertificateBatchRequestValidator,
   validateMiddleware,
   certificateRequestController.submitPublicCertificateRequest,
 );

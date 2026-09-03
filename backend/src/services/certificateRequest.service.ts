@@ -1,12 +1,13 @@
 import { Request } from "express";
 import { addDays } from "date-fns";
 import { certificateRequestRepository, CertificateRequestListFilters } from "../repositories/certificateRequest.repository";
+import { certificateRequestBatchRepository, BatchDocumentItem } from "../repositories/certificateRequestBatch.repository";
 import { prisma } from "../config/prisma";
 import { parsePagination, toPaginationResult } from "../utils/pagination.util";
 import { ApiError } from "../utils/apiError.util";
 import { activityLogService } from "./activityLog.service";
 import { notificationRepository } from "../repositories/notification.repository";
-import { sendCertificateStatusEmail, sendCertificateSubmittedEmail } from "../utils/residentEmail.util";
+import { sendCertificateStatusEmail, sendCertificateSubmittedEmail, sendCertificateBatchSubmittedEmail } from "../utils/residentEmail.util";
 
 export interface PublicCertificateRequestInput {
   documentTypeId: string;
@@ -23,6 +24,16 @@ export interface WalkInCertificateRequestInput extends PublicCertificateRequestI
   residentPhotoUrl?: string;
   authorizationLetterUrl?: string;
   representativeIdUrl?: string;
+}
+
+export interface PublicCertificateBatchRequestInput {
+  documentTypeIds: string[];
+  otherDocumentLabel?: string;
+  purpose: string;
+  address: string;
+  contactNumber: string;
+  email: string;
+  residentId: string;
 }
 
 async function getClaimDeadlineDays(): Promise<number> {
@@ -44,18 +55,35 @@ async function getById(id: string) {
   return request;
 }
 
+/** Tracking a reference number can land on either a batch (the normal case
+ * for online submissions since this feature shipped) or a standalone
+ * CertificateRequest (walk-in requests, and any online request submitted
+ * before batching existed) -- callers get one uniform shape either way. */
 async function trackByReference(referenceNumber: string) {
+  const batch = await certificateRequestBatchRepository.findByReferenceNumber(referenceNumber);
+  if (batch) {
+    return {
+      referenceNumber: batch.referenceNumber,
+      requestorName: batch.requestorName,
+      submittedAt: batch.submittedAt,
+      requests: batch.requests,
+    };
+  }
+
   const request = await certificateRequestRepository.findByReferenceNumber(referenceNumber);
   if (!request) {
     throw ApiError.notFound("No request found with that reference number");
   }
-  return request;
+  return {
+    referenceNumber: request.referenceNumber,
+    requestorName: request.requestorName,
+    submittedAt: request.submittedAt,
+    requests: [request],
+  };
 }
 
-async function submitPublicRequest(input: PublicCertificateRequestInput, req: Request) {
-  const resident = input.residentId
-    ? await prisma.resident.findFirst({ where: { id: input.residentId, deletedAt: null } })
-    : null;
+async function submitPublicBatchRequest(input: PublicCertificateBatchRequestInput, req: Request) {
+  const resident = await prisma.resident.findFirst({ where: { id: input.residentId, deletedAt: null } });
   if (!resident) {
     throw ApiError.badRequest("We couldn't find that resident record. Please select your name from the list.");
   }
@@ -63,40 +91,69 @@ async function submitPublicRequest(input: PublicCertificateRequestInput, req: Re
     .filter(Boolean)
     .join(" ");
 
-  const duplicate = await certificateRequestRepository.findActiveDuplicate(resident.id, input.documentTypeId);
-  if (duplicate) {
-    throw ApiError.conflict(
-      `You already have a request for this document (Reference No. ${duplicate.referenceNumber}) that's still being processed. Please track that request instead of submitting a new one.`,
-    );
+  const documentTypeIds = [...new Set(input.documentTypeIds)];
+  if (documentTypeIds.length === 0) {
+    throw ApiError.badRequest("Please select at least one document to request.");
   }
 
-  const request = await certificateRequestRepository.create(
-    { ...input, requestorName, channel: "ONLINE", status: "PENDING" },
-    "Request submitted online",
+  const documentTypes = await prisma.documentType.findMany({ where: { id: { in: documentTypeIds }, deletedAt: null } });
+  if (documentTypes.length !== documentTypeIds.length) {
+    throw ApiError.badRequest("One or more selected document types could not be found.");
+  }
+
+  for (const documentTypeId of documentTypeIds) {
+    const duplicate = await certificateRequestRepository.findActiveDuplicate(resident.id, documentTypeId);
+    if (duplicate) {
+      const docType = documentTypes.find((d) => d.id === documentTypeId);
+      throw ApiError.conflict(
+        `You already have a request for ${docType?.name ?? "one of these documents"} (Reference No. ${duplicate.referenceNumber}) that's still being processed. Please track that request instead of submitting a new one.`,
+      );
+    }
+  }
+
+  const documents: BatchDocumentItem[] = documentTypeIds.map((documentTypeId) => ({
+    documentTypeId,
+    otherDocumentLabel:
+      documentTypes.find((d) => d.id === documentTypeId)?.name === "Other Barangay Document" ? input.otherDocumentLabel : undefined,
+    purpose: input.purpose,
+  }));
+
+  const batch = await certificateRequestBatchRepository.create(
+    {
+      requestorName,
+      address: input.address,
+      contactNumber: input.contactNumber,
+      email: input.email,
+      residentId: resident.id,
+      channel: "ONLINE",
+    },
+    documents,
   );
+
+  const documentTypeNames = documentTypes.map((d) => d.name);
 
   await activityLogService.log({
     req,
     action: "New online certificate request submitted",
     module: "CERTIFICATES",
-    description: request.referenceNumber,
+    description: `${batch.referenceNumber} (${documentTypeNames.join(", ")})`,
   });
 
   await notificationRepository.create({
     title: "New Document Request",
-    message: `${requestorName} requested a ${request.documentType.name} (Ref: ${request.referenceNumber})`,
+    message: `${requestorName} requested ${documentTypeNames.length === 1 ? documentTypeNames[0] : `${documentTypeNames.length} documents (${documentTypeNames.join(", ")})`} (Ref: ${batch.referenceNumber})`,
     type: "INFO",
     link: "/dashboard/certificates",
   });
 
-  await sendCertificateSubmittedEmail({
-    email: request.email,
-    requestorName: request.requestorName,
-    referenceNumber: request.referenceNumber,
-    documentTypeName: request.documentType.name,
+  await sendCertificateBatchSubmittedEmail({
+    email: batch.email,
+    requestorName: batch.requestorName,
+    referenceNumber: batch.referenceNumber,
+    documents: documentTypes.map((d) => ({ name: d.name, fee: d.fee.toString() })),
   });
 
-  return request;
+  return batch;
 }
 
 async function submitWalkInRequest(input: WalkInCertificateRequestInput, req: Request) {
@@ -123,6 +180,7 @@ async function submitWalkInRequest(input: WalkInCertificateRequestInput, req: Re
     requestorName: request.requestorName,
     referenceNumber: request.referenceNumber,
     documentTypeName: request.documentType.name,
+    fee: request.documentType.fee.toString(),
   });
 
   return request;
@@ -218,6 +276,7 @@ async function updateStatus(
     referenceNumber: request.referenceNumber,
     documentTypeName: request.documentType.name,
     status: request.status,
+    fee: request.documentType.fee.toString(),
     claimDeadline: request.claimDeadline,
     rejectionReason: request.rejectionReason,
   });
@@ -256,7 +315,7 @@ export const certificateRequestService = {
   list,
   getById,
   trackByReference,
-  submitPublicRequest,
+  submitPublicBatchRequest,
   submitWalkInRequest,
   updateStatus,
   addRequirement,

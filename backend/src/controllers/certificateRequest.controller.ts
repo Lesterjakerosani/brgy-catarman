@@ -21,8 +21,8 @@ export const trackCertificateRequest = asyncHandler(async (req: Request<{ refere
 });
 
 export const submitPublicCertificateRequest = asyncHandler(async (req: Request, res: Response) => {
-  const request = await certificateRequestService.submitPublicRequest(req.body, req);
-  sendSuccess(res, request, 201);
+  const batch = await certificateRequestService.submitPublicBatchRequest(req.body, req);
+  sendSuccess(res, batch, 201);
 });
 
 export const submitWalkInCertificateRequest = asyncHandler(async (req: Request, res: Response) => {

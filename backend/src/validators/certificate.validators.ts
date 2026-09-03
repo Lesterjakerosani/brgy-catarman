@@ -36,9 +36,13 @@ export const publicCertificateRequestValidator = [
 // staff may be recording a request for someone not yet in the system).
 // Requires residentId so every online request must be tied to a real,
 // registered resident record -- the name shown on the request is then
-// derived server-side from that record, not trusted as free text.
-export const onlineCertificateRequestValidator = [
-  body("documentTypeId").isUUID(),
+// derived server-side from that record, not trusted as free text. Accepts
+// multiple document types in one submission, grouped under one shared
+// reference number (see CertificateRequestBatch).
+export const publicCertificateBatchRequestValidator = [
+  body("documentTypeIds").isArray({ min: 1 }).withMessage("Please select at least one document to request."),
+  body("documentTypeIds.*").isUUID(),
+  body("otherDocumentLabel").optional().isString(),
   body("address").isString().trim().notEmpty(),
   body("contactNumber").isString().trim().notEmpty(),
   body("email").isEmail(),
