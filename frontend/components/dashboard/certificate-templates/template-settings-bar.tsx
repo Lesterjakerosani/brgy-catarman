@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Slider } from "@/components/ui/slider"
 import type { CertificateTemplateStatus, CertificateTemplateType } from "@/types"
+
+export const MIN_LOGO_SIZE = 40
+export const MAX_LOGO_SIZE = 120
 
 const CERTIFICATE_TYPES: CertificateTemplateType[] = [
   "Certificate of Residency",
@@ -32,6 +36,8 @@ interface TemplateSettingsBarProps {
   onShowMunicipalLogoChange: (value: boolean) => void
   showBarangayDrySeal: boolean
   onShowBarangayDrySealChange: (value: boolean) => void
+  logoSize: number
+  onLogoSizeChange: (value: number) => void
 }
 
 function ToggleField({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
@@ -61,6 +67,8 @@ export function TemplateSettingsBar({
   onShowMunicipalLogoChange,
   showBarangayDrySeal,
   onShowBarangayDrySealChange,
+  logoSize,
+  onLogoSizeChange,
 }: TemplateSettingsBarProps) {
   return (
     <div className="rounded-xl border border-border bg-white p-4 shadow-sm">
@@ -103,6 +111,19 @@ export function TemplateSettingsBar({
         <ToggleField label="Show Barangay Logo" checked={showBarangayLogo} onChange={onShowBarangayLogoChange} />
         <ToggleField label="Show Municipal Logo" checked={showMunicipalLogo} onChange={onShowMunicipalLogoChange} />
         <ToggleField label="Show Barangay Dry Seal" checked={showBarangayDrySeal} onChange={onShowBarangayDrySealChange} />
+
+        <div className="space-y-1.5">
+          <Label className="text-xs font-medium text-muted-foreground">Logo Size ({logoSize}px)</Label>
+          <div className="flex h-10 items-center gap-3 rounded-lg border border-input px-3">
+            <Slider
+              value={[logoSize]}
+              min={MIN_LOGO_SIZE}
+              max={MAX_LOGO_SIZE}
+              step={4}
+              onValueChange={([v]) => onLogoSizeChange(v)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -6,9 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { ArrowLeft, Download, Eye, Plus, Printer, Save, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { FileDropzone } from "@/components/shared/file-dropzone"
 import { CertificateDocumentEditor } from "@/components/dashboard/certificate-templates/certificate-document-editor"
@@ -28,9 +26,6 @@ import { exportElementAsPdf } from "@/lib/export-pdf"
 import { dataUrlToFile } from "@/lib/api/adapters/file.adapter"
 import type { CertificateTemplate, CertificateTemplateStatus, CertificateTemplateType, UploadedFile } from "@/types"
 
-const MIN_LOGO_SIZE = 40
-const MAX_LOGO_SIZE = 120
-
 function blankDraft(type: CertificateTemplateType = "Certificate of Residency") {
   return {
     name: `${type} Template`,
@@ -49,7 +44,7 @@ function CertificateTemplatesPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const requestId = searchParams.get("requestId")
-  const { templates, documentTypes } = useCertificateTemplates()
+  const { templates, documentTypes, isLoading: templatesLoading } = useCertificateTemplates()
   const addTemplate = useAddCertificateTemplate()
   const updateTemplate = useUpdateCertificateTemplate()
   const { certificateRequests } = useAllCertificateRequests()
@@ -97,18 +92,37 @@ function CertificateTemplatesPageContent() {
     )
   }
 
-  const [selectedTemplateId, setSelectedTemplateId] = React.useState<string | null>(templates[0]?.id ?? null)
-  const [draft, setDraft] = React.useState(() => (templates[0] ? { ...templates[0] } : blankDraft()))
+  const [selectedTemplateId, setSelectedTemplateId] = React.useState<string | null>(null)
+  const [draft, setDraft] = React.useState(() => blankDraft())
   const [resetConfirmOpen, setResetConfirmOpen] = React.useState(false)
   const [previewOpen, setPreviewOpen] = React.useState(false)
   const printPaperRef = React.useRef<HTMLDivElement>(null)
   const [exporting, setExporting] = React.useState(false)
+
+  // `templates` loads asynchronously, so it's still [] on first render --
+  // selectedTemplateId/draft can't be initialized from it directly (that
+  // silently locked the editor onto a disconnected blank draft: "Save
+  // Template" then created a brand-new duplicate instead of updating the
+  // real one, so no edit -- including a logo size change -- ever appeared
+  // to save). Do the initial selection once real data actually arrives, but
+  // never again after that, so it can't clobber an in-progress edit or a
+  // deliberate "New Template" click later.
+  const hasInitializedRef = React.useRef(false)
+  React.useEffect(() => {
+    if (hasInitializedRef.current || templatesLoading || activeRequest) return
+    hasInitializedRef.current = true
+    if (templates[0]) {
+      setSelectedTemplateId(templates[0].id)
+      setDraft({ ...templates[0] })
+    }
+  }, [templatesLoading, templates, activeRequest])
 
   // When arriving with ?requestId=..., auto-select the template matching what
   // was actually requested, so staff land straight on the right document
   // instead of having to pick it manually from the dropdown.
   React.useEffect(() => {
     if (!activeRequest) return
+    hasInitializedRef.current = true
     const targetType = mapDocumentTypeToTemplateType(activeRequest.documentType)
     const match =
       templates.find((t) => t.type === targetType && t.status === "Active") ??
@@ -272,29 +286,18 @@ function CertificateTemplatesPageContent() {
           onShowMunicipalLogoChange={(showMunicipalLogo) => setDraft((prev) => ({ ...prev, showMunicipalLogo }))}
           showBarangayDrySeal={draft.showBarangayDrySeal}
           onShowBarangayDrySealChange={(showBarangayDrySeal) => setDraft((prev) => ({ ...prev, showBarangayDrySeal }))}
+          logoSize={draft.logoSize}
+          onLogoSizeChange={(logoSize) => setDraft((prev) => ({ ...prev, logoSize }))}
         />
 
         <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm">
           <p className="mb-3 text-sm font-semibold text-foreground">Barangay & Municipal Logos</p>
           <p className="mb-3 text-xs text-muted-foreground">
-            Upload the actual seal photos used for the logo placeholders above. These are used on printed certificates only and are shared with the Blotter Template Builder — they do not change the site&apos;s main logo in System Settings.
+            Upload the actual seal photos used for the logo placeholders above. These are used on printed certificates only and are shared with the Blotter Template Builder — they do not change the site&apos;s main logo in System Settings. To resize the logos, use the Logo Size slider above; click <strong>Save Template</strong> below to save it.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FileDropzone label="Upload Municipal Logo" accept="image/*" multiple={false} value={municipalLogoFiles} onChange={setMunicipalLogoFiles} />
             <FileDropzone label="Upload Barangay Logo" accept="image/*" multiple={false} value={barangayLogoFiles} onChange={setBarangayLogoFiles} />
-          </div>
-
-          <div className="mt-4 space-y-1.5 border-t border-border pt-4">
-            <Label className="text-xs font-medium text-muted-foreground">Logo Size ({draft.logoSize}px)</Label>
-            <div className="flex max-w-sm items-center gap-3">
-              <Slider
-                value={[draft.logoSize]}
-                min={MIN_LOGO_SIZE}
-                max={MAX_LOGO_SIZE}
-                step={4}
-                onValueChange={([v]) => setDraft((prev) => ({ ...prev, logoSize: v }))}
-              />
-            </div>
           </div>
 
           <Button type="button" className="mt-3" onClick={saveCertificateLogos}>

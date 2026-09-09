@@ -20,19 +20,10 @@ export function getDefaultTemplateBodyHtml(type: CertificateTemplateType): strin
   const bodyText = BODY_TEXT[type]
 
   return `
-    <div style="display:flex; align-items:center; justify-content:space-between; text-align:center;">
-      <div>{{municipal_logo}}</div>
-      <div style="flex:1;">
-        <p style="margin:0; font-weight:700; font-size:15px; letter-spacing:0.05em;">{{barangay}}</p>
-        <p style="margin:2px 0; font-size:11px;">Republic of the Philippines</p>
-        <p style="margin:2px 0; font-size:11px;">Province of {{province}}</p>
-        <p style="margin:2px 0; font-size:11px;">{{municipality}}</p>
-        <p style="margin:2px 0; font-size:11px;">Office of the Punong Barangay</p>
-      </div>
-      <div>{{barangay_logo}}</div>
+    <div style="text-align:center; margin-bottom:20px;">
+      <h1 style="margin:0; font-size:20px; font-weight:700; letter-spacing:2px; text-transform:uppercase;">${title}</h1>
+      <div style="width:100px; height:2px; background:#0F172A; margin:10px auto 0;"></div>
     </div>
-    <hr style="margin:20px 0; border:none; border-top:2px solid #0F172A;" />
-    <p style="text-align:center; font-size:22px; font-weight:700; letter-spacing:0.08em; margin:24px 0;">${title}</p>
     <p style="margin:0 0 16px;">TO WHOM IT MAY CONCERN:</p>
     <p style="text-align:justify; text-indent:40px; line-height:1.9;">
       This is to certify that <strong>{{resident_full_name}}</strong>, of legal age, {{civil_status}}, currently residing at
